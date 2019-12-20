@@ -1,8 +1,7 @@
 ---
-attachments: [Clipboard_2019-12-21-01-41-08.png, Clipboard_2019-12-21-01-41-08.png, Clipboard_2019-12-21-01-41-20.png, Clipboard_2019-12-21-01-41-20.png, Clipboard_2019-12-21-01-41-32.png, Clipboard_2019-12-21-01-41-32.png, Clipboard_2019-12-21-01-41-57.png, Clipboard_2019-12-21-01-41-57.png, Clipboard_2019-12-21-02-04-59.png]
 title: Linear algebra
 created: '2019-12-20T22:38:52.840Z'
-modified: '2019-12-20T23:05:28.866Z'
+modified: '2019-12-20T23:07:46.677Z'
 ---
 
 # Linear algebra
