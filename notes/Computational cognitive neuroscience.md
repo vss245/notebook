@@ -2,10 +2,11 @@
 attachments: [brain.png, parts.png, synapse.png]
 title: Computational cognitive neuroscience
 created: '2019-12-20T23:34:28.802Z'
-modified: '2019-12-21T00:57:06.668Z'
+modified: '2019-12-21T01:00:26.067Z'
 ---
 
 # Computational cognitive neuroscience
+
 (skipped Networks, Perception, Motor Control)
 
 ## Intro
