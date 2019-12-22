@@ -1,10 +1,5 @@
----
-title: Linear algebra
-created: '2019-12-20T22:38:52.840Z'
-modified: '2019-12-20T23:34:12.140Z'
----
-
 # Linear algebra
+
 LA is about translating things from m-dimensional to n-dimensional spaces
 
 ## Numbers
@@ -55,8 +50,19 @@ mapped onto more than one)
 - For example, 2x is linear, 2x-1 is not
 ## Matrices
 - Values organized in m columns and n rows
+
 - Addition, subtraction, scalar multiplication are performed elementwise
-(examples)
+
+  $\begin{pmatrix}1&2\\3&4\end{pmatrix} + \begin{pmatrix}1&2\\3&4\end{pmatrix} = \begin{pmatrix}2&4\\6&8\end{pmatrix}$
+
+  $\begin{pmatrix}1&2\\3&4\end{pmatrix} - \begin{pmatrix}1&2\\3&4\end{pmatrix} = \begin{pmatrix}0&0\\0&0\end{pmatrix}$
+
+  $\begin{pmatrix}1&2\\3&4\end{pmatrix} * 2 = \begin{pmatrix}2&4\\6&8\end{pmatrix}$
+
+  - Matrix multiplication: RxC
+
+  $\begin{pmatrix}1&2\\3&4\end{pmatrix} * \begin{pmatrix}1&2\\3&4\end{pmatrix} = \begin{pmatrix}1*1+2*3&1*2+2*4\\3*1+4*3&4*2+4*4\end{pmatrix}=\begin{pmatrix}7&10\\15&22\end{pmatrix}$
+
 - Types
   - Zero
   - Transpose (switch R and C)
@@ -65,9 +71,9 @@ mapped onto more than one)
   - Diagonal
   - Identity
   - Inverse
+  
 - Inverse matrices
   - Found by Gaussian elimination
-  (examples)
   - To see if matrix is invertible, use the determinant (if it's not 0, the inverse exists)
 ## Vectors
 - Special interpretation of matrices (1xn and nx1)
@@ -88,18 +94,16 @@ mapped onto more than one)
 - Closed under addition (sum of two arbitrary elements in W is an element in W)
 ## Span
 - A subspace can be spanned by scalar multiplication and addition of vectors
-(example)
 ## Coordinates
 - Can be expressed using trivial bases (0,1) and (1,0)
 - But can also be expressed using any bases
-(example)
 ## Linear transformations
 - Same definition as above, but for vectors
 ## Rank
 - Defines the transformation (if output is 1D - rank 1, 2D - rank 2 and so on)
 ## Eigenvalues and eigenvectors
 - If the image of X through the transformation defined by M is $\lambda X$, then $\lambda$ is the eigenvalue and X is the corresponding eigenvector
-(example)
+
 
 
 
