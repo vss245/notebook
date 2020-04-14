@@ -1,10 +1,3 @@
----
-title: Fries2015
-created: '2019-12-21T01:12:10.931Z'
-modified: '2019-12-21T01:15:36.763Z'
----
-
-### Fries2015
 # A mechanism for cognitive dynamics: Neuronal communication through neuronal coherence
 - A mechanism for cognitive dynamics - communication through coherence
 ## Abstract

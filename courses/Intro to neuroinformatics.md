@@ -31,6 +31,7 @@
 			- Von Neumann bottleneck - computers spend a lot of time on memory, e.g. retrieval, saving etc
 		- Differences between brains and computers
 		
+	
 	Similarities 					Differences
 	- Process information		- Parallel computation
 	- Represent information		- Separation of memory and processing
@@ -221,5 +222,5 @@
 	
 	$$I_e=g_m∗(V−E_m)$$
 	
-	$$V(t)=V_infinity∗(V(0)−V_m )∗e^{(−t/(\tau_m ))}$$
+	$$V(t)=V_{inf}∗(V(0)−V_m )∗e^{(−t/(\tau_m ))}$$
 	
