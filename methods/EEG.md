@@ -1,10 +1,3 @@
----
-attachments: [Clipboard_2019-12-21-02-12-44.png]
-title: EEG
-created: '2019-12-20T23:05:40.325Z'
-modified: '2019-12-20T23:24:25.902Z'
----
-
 # EEG
 ## Spectral analysis
 - Deconstructing waves into sine and cosine waves (FT)
