@@ -236,20 +236,108 @@
 
 #### Dipole fitting
 
-[...]
+- Estimating a single point or a small number of points that explain the maximal amount of topographical variance
+- Estimate dipole parameters => Determine weights for all electrodes so that the sum of their activity ~ dipole activity
+- Disadvantage: rests on the assumption that the dipole that's fitted is the only active source in the brain
+  - can be valid for motor/sensory experiments, but usually not for cognitive ones
 
 #### Non-adaptive distributed-source imaging 
 
-- LORETA
-- Minimum-norm estimators
+- Estimate activity at thousands of fixed dipoles with known locations and orientations and estimated magnitude
+  - With 64 sensors, 10000 sources and 3 dipole orientations => 64 x 3 x 10000
+  - Sources are voxels in the brain
+  - The electrode weights are computed based on the electrode location relative to the brain
+- Examples: LORETA, minimum-norm estimators
+- Advantages: quick, can be applied to a single time-point of data
+- Disadvantages: weights for each electrode are not fine-tuned, number of comparisons (e.g. estimate sources over time and frequency for 10000 voxels and two conditions => 100 mil statistical comparisons)
 
 #### Adaptive distributed-source imaging 
 
-- Beamforming
+- Compared to non-adaptive methods, weights are computed differently (not just according to physical position, but also according to the data - covariance of interelectrode activities)
+  - Covariance matrices can also be computed from cross-spectral densities (frequency-domain analogue of time-domain covariance)
+  - Must be based on time windows
+- Example: beamforming
+- Advantage: weights are adapted to the data, increasing sensitivity
+- Disadvatange: number of required parameters
+- Book: Adaptive Spatial Filters for Electromagnetic Brain Imaging (Sekihara and Nagarajan 2008)
+
+#### Limits
+
+- Uncertainty in source imaging can result from uncertainties in electrode position, brain anatomy, coreg of MRI data, head movement, conductivity of tissues etc
+- MEG is practically superior, but EEG can be just as good with precise data
 
 ## Connectivity 
 
-- 
+- Most brain connectivity measures are bivariate
+  - Easier to implement, interpret, visualize and quantify
+- Bivariate correlations can misinterpret relationships if the networks is multivariate 
+  - in task-related connectivity - mitigated by condition comparisons
+- Important points:
+  1. The magnitude of phase lag is usually not taken into consideration, just the consistency across time and trials
+  2. Nonzero phase lag does not necessarily imply causal or directed connectivity
+     - Also hard to interpret who's first
+     - Methods such as GC or PSI provide directed connectivity
+     - Proving causal connectivity should be supported with known anatomical connectivity, previous research or causal methods such as TMS
+  3. Phase-based and power-based measures reveal different patterns of results
+  4. Functional connectivity is different from effective connectivity
+  5. Connectivity can be confounded by volume conduction
+- Which measure to use?
+  - No correct method for any dataset
+
+- Phase-based connectivity metrics
+  - Based on the distribution of phase angle differences between two electrodes
+  - Have a neurophysiological interpretation
+  - However: rely on precise temporal relationships in the same frequency band
+
+- Power-based connectivity metrics
+  - Correlation of time-frequency power between two electrodes
+- Granger causality
+  - Tests whether variance of signal A can be predicted from variance in signal B earlier in time
+  - Tests for directed connectivity and can ignore simultaneous connectivity
+  - Twice the number of statistical comparisons that need to be controlled for (A -> B and B -> A)
+- Mutual information
+  - Detecting shared information between two variables
+  - Computed using the distributions of values within variables and the joint distribution
+  - No clear neurophysiological interpretation
+- CFC
+  - Coupling of activity in two different frequency bands
+  - Neurophysiological theories of information processing based on CGC
+- Graph theory
+  - Large-scale/multivariate network dynamics
+  - High-level summary can be compared between EEG and MRI and other modalities
+  - However, these metrics are often used in exploratory data-mining analyses that lack a theoretical framework
+  - Important to have a specific hypothesis in mind
+- Confound: volume conduction
+  - Signal from the same source can be captured by separate electrodes
+  - Features:
+    - Zero phase lag (however, there's some true zero phase lag connectivity (Chawla 2001, Roelfsema 1997, Viriyopase 2012)
+    - Strength of connectivity (VC connectivity will be stronger at neighboring electrodes)
+    - Spurious connectivity can only show positive correlations
+    - VC-driven connectivity means that changes in power correlate with changes in connectivity
+  - Solutions:
+    - Spatial filter (such as the surface Laplacian or source imaging filter)
+    - Examine only negative correlations
+    - Test for temporally lagged connectivity
+    - Test for condition differences in connectivity
+    - Test for cross-frequency correlation
+    - Test for a dissociation between connectivity and power
+    - Use measures like iCOH, PLI, wPLI or PSI
+
+### Phase-based connectivity
+
+- p 354
+
+### Power-based connectivity
+
+[...]
+
+### Granger causality 
+
+
+
+
+
+
 
 
 
