@@ -35,5 +35,5 @@
   - multiplying signal 1 by signal 2 with a flipped sign of the phase
 - => CSD = fourier transform of S1 * conj(S2) => complex valued number that represents a signal in which the amplitude is the product of A1 and A2 and the phase is the phase difference
 
-## Measures
+
 

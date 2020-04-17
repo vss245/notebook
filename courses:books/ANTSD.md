@@ -183,7 +183,22 @@
 
 ### Intertrial Phase Clustering
 
-[...]
+- EEG series convolved with a complex wavelet can be represented as a vector in the complex polar plane (magnitude and phase angle relative to the real axis)
+  - The phase angle shows timing of frequency band specific activity
+- Phase values cannot be averaged like voltage or power, since they are circular (e.g. 0.05 and 6.23 radians are close to each other)
+- Phase angles can be represented on the circle using Euler's formula $e^{ik}$
+- Measure of phase clustering - distribution of phase angles
+  - ITPC
+- This measure can also be referred to as the phase-locking value, phase coherence etc
+- Uniformity of the distribution is measured by computing the average vector and taking its length (individual vectors are of unit length, average vector will be less than 1 - smaller if the individual vectors are further apart)
+- $ITPC = |n^{-1}\sum_{r=1}^ne^{ik}|$
+  - $n^{-1}$ takes the average
+  - $e^{ik}$ represents phase angle k 
+  - r = trial
+  - in Matlab code: abs(mean(exp(i*k)))
+    - k = vector of phase angles at one TF point
+- Noise and sampling errors can increase ITPC
+- Phase angles are independent of power, but they are harder to estimate at low power
 
 ## Spatial Filters
 
@@ -325,13 +340,182 @@
 
 ### Phase-based connectivity
 
-- p 354
+#### ISPC (intersite phase clustering)
+
+- average of phase angle differences between electrodes over time
+- $ISPC_f=|n^{-1}\sum_{t=1}^ne^{i(\phi_{xt}-\phi_{yt})}|$
+- $\phi_x$ is the phase angle from electrode x at frequency f at time point n
+
+#### Spectral coherence (magnitude-squared coherence)
+
+- Phase values are weighted by power values
+- $Coh_{xy} = |\frac{S_{xy}}{S_{xx}S_{xy}}|$
+- $S_{xy}$ is the cross-spectral density between electrodes X and Y 
+- $S_{xx}$ and $S_{yy}$ is the autospectral densities of electrodes X and Y
+- Using Euler's formula:
+  - $C_{xy} = |n^{-1}\sum_{t=1}^n|m_{tx}||m_{ty}|e^{i\phi_{txy}}|^2$
+  - $m_x$ and $m_y$ are the magnitudes of analytic signals X and Y
+  - $\phi_{xy}$ is the phase angle difference between electrodes X and Y
+  - t = either trials or time points
+- Spectral coherence is normalized by power
+
+#### Phase lag based measures 
+
+- Spurious connectivity occurs at zero or $\pi$ phase
+- Measures: 
+  - iCOH - same as spectral coherence, but only the imaginary part is taken before the magnitude
+  - PSI - measures directed phase-based connectivity - if the slope of the phase lag is consistent (but measures only the overall asymmetry, so will be zero for strong bidirectional connectivity)
+  - PLI - measures the extent to which a distribution of phase angle differences is skewed towards the positive or negative sides of the imaginary axis
+    - $PLI_{xy} = |n^{-1}\sum_{t=1}^nsgn(imag(S_{xyt}))|$
+    - imag(S) is the imaginary part of cross-spectral density at time point t
+  - wPLI - weighs angle difference according to their distance from the real axis (scaled by the magnitude of the imaginary component)
+- Connectivity over time is sensitive to high frequency connectivity and resting state data, connectivity over trials has higher temporal precision
 
 ### Power-based connectivity
 
+- Correlation coefficient
+  - Pearson's: covariance of two variables scaled by the variance of each variable
+  - Spearman correlation (non-parametric): data are ordered and ranked, then Pearson's correlation formula is applied
+
+### Granger prediction
+
+#### Univariate autoregression
+
+- $X_t = 0.8*X_{t-1}$ - autoregression of order 1
+- $X_t = 0.8*X_{t-1} - 1.3*X_{t-2}$ - autoregression of order 2
+- General expression: $X_t = \sum_{n-1}^ka_nX_{t-n}+e_{xt}$
+  - a - vector of the autoregression coefficients
+  - e - error of the residual that can't be predicted from X
+
+#### Bivariate autoregression
+
+- $X_t = 0.8*X_{t-1} - 0.3*X_{t-2}$
+- $Y_t = -0.4*Y_{t-1} - 1.3*X_{t-1}$ - bivariate
+- General expression: 
+  - $X_t = \sum_{n-1}^ka_nX_{t-n}+\sum_{n-1}^kb_nY_{t-n}+e_{xyt}$
+  - $Y_t = \sum_{n-1}^kc_nY_{t-n}+\sum_{n-1}^kd_nX_{t-n}+e_{yxt}$
+  - a and b can be different, so the influence of X on Y can be different from the influence of Y on X
+- For orders >1, coefficients are vectors
+- Measure: compare the variance of the errors in the univariate and bivariate model
+- $G = \ln(\frac{var(e_x)}{var(e_{xy})})$
+- For EEG analyses, GC is computed in sliding time segments
+- Model order can be selected using BIC or AIC (how many terms to go back into the past)
+  - can be estimated separately for each time segment
+
+#### Frequency domain GC
+
+- Incorrect approach: bandpass filter the data and apply Granger prediction
+- Geweke method: compute dot products between the autoregression coefficients and complex sine waves and apply those results to the error variance
+
+#### Statistics
+
+- Permutation testing
+  - useful for frequency domain since the underlying distibution is not known
+- Permute the order of time segments within trials
+
+### Mutual information
+
 [...]
 
-### Granger causality 
+### Cross-frequency coupling
+
+[...]
+
+### Graph theory
+
+- Networks can be represented as matrices or as graphs
+- First step: all-to-all connectivity matrix
+  - Slice of a hypercube with dimensions electrode x electrode x time x frequency x condition
+- Connectivity matrices can be thresholded to compute metrics
+  - Thresholding value can change with the frequency band
+  - Or you can keep the k strongest connections
+- Connectivity matrices can also be binarized
+
+#### Degree
+
+- measure of how many connections are at each vertex (e.g. if there's a 'hub')
+
+#### Clustering coefficient
+
+- proportion of electrodes with connections w electrode A that also have connections with each other
+- $CC_i = \frac{2\sum_{j=1}^nv_ij}{n_i(n_i-1)}$
+- v is 1 if there's connectivity between electrodes i and j
+- Clustering coefficient and degree are mathematically and conceptually independent
+
+#### Path length
+
+- Average distance from each vertex to any other vertex in terms of waypoints
+- Limited physiological interpretation, since many brain nodes are not measurable with EEG (like the thalamus)
+
+#### Small-world networks
+
+- High clustering and lower path length than expected by chance
+- $swn = \frac{C/C_r}{L/L_r}$ - compare network with a random network
+  - Erdös-Rényi random graphs
+  - Statistical significance can be evaluated by permutation testing - making a random network at every iteration
+
+## Statistics
+
+- Within-subject analyses - cross-trial variability
+- Group-level analyses - consistency of the direction of the effect
+- p-value thresholds are arbitrary, but 0.05 or 0.01 are common
+
+### Correction for multiple comparisons
+
+- In electrophysiology, a large number of tests is performed
+- Common: Bonferroni correction, but it's inappropriate for EEG data since it assumed independency and can be too stringent
+- P-values are based on the number of datapoints
+  - should be supplemented with a measure of effect size, SNR, odds ratio, sensitivity, ROC etc
+
+### Parametric vs nonparametric
+
+- Difference: assumptions regarding the distribution from which the data is drawn
+- Parametric statistics assume a Gaussian distribution
+- Non-parametric statistics make no assumptions
+  - Permutation tests compute an observed distribution of data points
+
+### Combining data across subjects
+
+- Most often, data are averaged across subjects
+  - Even if subjects have different alpha peaks, smoothing from wavelet convolution and spatial smoothing from VC can render them comparable
+- Time-frequency windows can be defined individually for each subject
+
+### Non-parametric permutation testing
+
+- Doesn't rely on assumptions about the distribution and easily incorporates corrections for multiple comparisons
+- Compute values under the null hypothesis by shuffling values and build a random distribution, compute statistical test values
+- Compute a p-value from the test value
+- Correct for MC by using pixels or clusters of pixels that are above the threshold
+
+#### Cluster-based
+
+- How to define a cluster?
+  - Non-data driven: set amount of ms and Hz
+  - Data-driven: 
+    - Perform permutation testing
+    - Apply threshold to the TF map using 0.05 (precluster threshold) at each iteration
+    - This will result in clusters under the null hypothesis 
+    - Collect the data from the biggest cluster in the map
+    - Remove any clusters that are less that the 95% of the distribution of largest clusters expected under the null hypothesis 
+
+### False discovery rate
+
+- Controls for the probability of type I errors within a distribution of p-values
+
+## Within subject analyses
+
+[...]
+
+## Between subject analyses 
+
+- Avoid circular inferences:
+  - e.g. selecting data based on a particular characteristic and then testing for significance
+
+FINISH
+
+## Conclusions
+
+- 
 
 
 
