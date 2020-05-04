@@ -510,8 +510,7 @@
 
 - Avoid circular inferences:
   - e.g. selecting data based on a particular characteristic and then testing for significance
-
-FINISH
+  - 
 
 ## Conclusions
 
