@@ -1,0 +1,51 @@
+## Complex network measures of brain connectivity and their uses and interpretations
+
+Rubinov and Sporns 2010
+
+- Brain regions can be connected via anatomical tracts or functional associations
+  - This can be conceptualized as a network
+  - Advantages: easy to quantify & compare
+- Network – a representation of complex system, has nodes and edges
+  - Can be represented in a connectivity matrix
+  - Influenced by choice of imaging method, parcellation, method of connectivity
+  -  Issues with nodes and links:
+    - Nodes typically represent brain regions and edges represent connections (directed or undirected). Ideally, nodes represent distinct brain regions, but in some methods, for example, sensor-level analysis with EEG or MEG, regions can be less distinct. 
+    - Edges can be binarized (absence or presence of a connection) or weighted (strength of connection). Binary edges are easier to work with, but weighted metrics can be more meaningful
+    - We may or may not want to include directionality in the model
+- Network measures characterize aspects of connectivity (for the whole network or individual components)
+  - Basic metrics:
+    - Number of nodes and links
+    - Degree – number of neighbors
+      - Degree distribution, density (mean degree)
+    - These metrics are useful for statistical comparisons
+- In networks, we are interested in how segregated their components are (modularity), but also how integrated they are (interconnectedness)
+- Measures of segregation quantifies the presence of densely interconnected separate groups
+  - Clustering coefficient – the fraction of triangles around a node
+  - Transitivity - same thing, but normalized for the whole network
+  - Modularity – the degree to which a network can be subdivided into groups
+- Measures of integration quantify interconnectedness within a network
+  - Characteristic path length – average shortest path length between all nodes
+  - Global efficiency – inverse of the above
+  - Structural and effective networks have high efficiency, functional networks have lower efficiency
+- Small world networks are supposed to reconcile segregation and integraion
+  - More clustered than random networks but with the same characteristic path length
+  - Prominent in anatomical networks, less so in functional (and harder to interpret)
+- Other metrics
+  - Motif – pattern of local connectivity
+  - Centrality – importance of individual nodes
+  - Degree
+  - Resilience 
+  - Degree distribution
+  - Assortativity (how much similar nodes connect to each other)
+- Examples of uses (from Journal Club):
+  - Schizophrenia (van den Heuvel et al, 2010)
+    - Structural networks (DTI): longer characteristic path lengths, reduction of centrality of frontal regions (i.e. less global integration)
+  - Alzheimer’s disease (Supekar et al, 2008)
+    - Resting state MRI: network analysis helps distinguish healthy and pathological subjects (loss of small world properties, clustering coefficient)
+  - Brain development (Boersma et al, 2011)
+    - Resting state EEG: development shows shift from more random to organized small-world networks (clustering, path length)
+- Critique:
+  - Composition of networks varies depending on method and analysis choices
+  - Many studies assume the same number of nodes and edges across graphs (while pathology may reduce it for some groups)
+  - Not a lot of graph metrics in common across studies
+  - Hypotheses tested on a certain graph level without justification
