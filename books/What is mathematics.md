@@ -1192,9 +1192,104 @@
     - if we add all these for different i’s, the last terms will add up to $2(u-m)(nm-x_1-...-x_n)$ which is zero because m is the sum of x’s divided by n, so we will retain only the quadratic terms 
 - this method can be applied in more complicated cases, like finding an optimal line through points
   - $y = ax+b$ and we want to find the coefficients a and b
-  - the distance in the y direction from the line to the point $x_i,y_i$ is given by $y_i-(ax_i)$
+  - the distance in the y direction from the line to the point $x_i,y_i$ is given by $y_i-(ax_i+b)$ and the square of this distance is $(y_i-ax_i-b)^2$, so we want to find a and b such that the sum of these distances for all points is minimized
 
+### Existence of extrema and Dirichlet’s principle
 
+- sometimes the solution is directly demonstrated to give a better result (e.g. the triangle problem)
+  - but sometimes we have to assume that a solution is found and examine this assumption and draw conclusions from it
+  - the second method involves an assumption that a solution exists
+- until the late 19th century, the logical point of this assumption was not really examined
+- Riemann’s thesis on the theory of functions of a complex variable had a logical “hole” in it - the question of the existence of a minimum
+  - much of the theory was based on “Dirichlet’s principle”
+  - image that part of a plane or any surface is covered with foil and that a current is set up in the layers of the foil by connecting it to a battery
+  - we know the physical result, but what about the mathematical problem?
+  - the physical phenomenon can be described as a boundary value problem of a partial differential equation 
+  - the problem is assumed to be solvable because it is assumed to be equivalent to a physical phenomenon, but this is not proven by an argument
+  - Riemann showed that the problem is equivalent to a minimum proboem (a quantity expressing the energy of the electric flow is minimized by the actual flow in comparison to the other flows possible)
+  - then he stated “Dirichlet’s principle” that such a minimum problem has a solution
+- this problem was only solved decades later
+- examples:
+  - we mark two points A and B at a distance d on a straight line L and ask for the polygon of shortest length that starts at A in a direction perpendicualr to L and ends at B
+  - any path will have a length greater than d (AB), since it is the shortest distance between the points
+  - if we vary the height of a point at which we start above A, we can obtain a path as different from d as we like - if a shortest admissible path exists, it must be equal to d
+  - but AB is equal to d and this path does not start perpendicular to L, so this minimum problem has no solution
+- a general form:
+  - consider a class of objects (curves or surfaces) to each of which we attach a certain number as a function (e.g. length or area)
+  - if there is a finite number of objects in the class, there must be a maximum and a minimum
+  - but if there are infinitely many objects in the class, there doesn’t need to be a largest or a smallest number
+
+### Elementary extremum problems
+
+- a compact set is closed and bounded, e.g. a line segment with a closed interval, a rectangle or a finite set of points
+- the competing values in the elementary problems can be regarded as the values of a function in a domain that’s either compact or can be made so
+  - e.g. if we have closed curves, we can find points that have the least possible distance from each other, but if they are infinite, there may not be a solution
+- in higher cases, we may have difficulties - e.g. the domain of the independent variable is not compact or the function is not continuous
+
+### The isoperimetric problem
+
+- the circle encloses the largest area among all closed curves (“obvious” fact that was hard to prove)
+- assume that a solution exists and then suppose the curve C is the prescribed one with the length L and maximum area
+  - we can show that C must be convex (the straight segment joining any points of C must be inside or on C) - if it’s concave, we can connect two points with a line outside of C that will describe a larger area
+  - we can choose two points dividing the solution curve into arcs of equal length - then the line AB must divide it into two equal parts
+    - sub-problem - find the arc of length L/2 with endpoints on A and B encloses a maximum area
+    - we can show that every inscribed angle in this arc will be a right angle, therefore it is a semicircle (if they were not 90 degrees, we could find a larger inscribed triangle)
+
+### Extremum problems with boundary conditions
+
+- domain of the variable in these problems can be restricted by boundary conditions
+- Weierstrass showed that in a compact domain a continuous function will have a largest and a smallest value, but that does not exclude the possibility of it being at the boundary (e.g. u = x restricted by 0 and 1, largest and smallest values are at endpoints)
+  - but these will not be represented by a summit or a depression in the curve
+- we can show a connection between the three street problem and the largest curve problem - if we shrink A, it can break up into 3 arcs and then shrink to the streets
+
+### Calculus of variations
+
+- brachistochrone problem
+  - imagine a particle constrained to slide without friction along a certain curve joining a point A to a lower point B
+  - along which curve will the time required for descent be least?
+  - this problem is different from previously known ones, because earlier differential calculus problems had the quantity to be minimized depend only on one or more numerical variables, but here the time to descend depends on the whole curve
+  - the solution turned out to be the cycloid (curve described by a point on a rolling circle)
+    - this curve has popped up in other problems too, e.g. pendulums
+- there were many ways to solve this problem, but many of them were specific to the problem
+  - Euler and Lagrange evolved more general methods for solving extremum problems in which the independent element was a curve, a function or a system of functions
+  - this method was called the calculus of variations
+- this branch of mathematics has many applications in physics - natural phenomena follow some pattern of maxima and minima (e.g. the reflection of a light ray follows a minimum principle, refraction of a light ray is determined by two straight segments with an angle $\alpha$ and $\alpha'$, with conditions $\sin\alpha/\sin\alpha'=v/w$)
+  - Fermat proved that this path is such that the time taken by a light ray is a minimum
+  - he also generalized the statement of this law so as to include curved surfaces of discontinuity between media
+    - in these systems, the light still follows a path along which the time taken is minimized
+  - he also considered any optical system in which the velocity of light varies in a prescribed way (e.g. the atmosphere): you can divide the continuous heterogeneous medium into thin slabs with approximately constant velocity of light and imagined this medium replaced by one with constant velocity - then you can apply the principle going from each slab to the next
+    - the thickness of the slabs can tend to 0 and so the following principle is established: in an inhomogeneous medium, a light ray follows a path along which the time taken is a minimum with respect to all paths joining the two points
+- minimum principles are dominant in other branches of physics, e.g. a stable equilibrium of a mechanical system is attained if the system is arranged in such a way that its “potential energy” is a minimum 
+  - laws of motion also use maximum and minimum principles
+- Bernoulli’s solution to the brachistochrone problem: start with the fact that a mass point falling from rest at A along any curve C will have at any point P a velocity proportional to $\sqrt h$, where h is the vertical distance from A to P, dissect the space into many horizontal slabs and assume constant velocity in each slab
+  - according to the refraction law, the motion must minimize the travel time, so we apply the refraction law and find the angle between the segments - if the thickness of slabs tends to 0, $\sin \alpha/\sqrt h$ is constant and the curve is a cycloid
+
+### Geodesics on a sphere
+
+- a geodesic is a shortest path between two points on a surface
+  - on a sphere, this is an arc of great circles
+- if P and Q are two points on a sphere, c is the shortest path connecting them - what is the longer arc c’ of the same great circle? c’ solves a maxi-minimum problem
+
+### Experimental solutions of minimum problems
+
+- sometimes variational problems cannot be solved explicitly through formulas or geometric constructions
+- but it can be enough to prove that a solution under certain conditions exists and then investigate properties of this solution
+- if a proof is hard, it can be useful to physically emulate the conditions of the problem (the existence of a physical phenomenon will represent the solution of the mathematical problem)
+  - this will not be a mathematical proof, but can help solve a problem
+- a problem: find the surface of the smallest area bounded by a given closed contour in space
+  - mathematically, this problem is connected with PDE solutions
+  - Euler showed that all non-plane minimal surfaces must be saddle-shaped and the mean curvature must be zero
+  - if we dip a closed contour made of wire into a liquid of low surface tension and then take it out, a film in the form of a minimal surface of least area will span the contour
+    - experiments have been conducted with more complicated topological surfaces, e.g. one-sided surfaces or of a genus different from 0
+      - these sometimes show surprising discontinuities with continuous changes to the shape
+- other mathematical problems also have experimental solutions
+  - Steiner’s problem can be solved with soap surfaces too
+
+## Chapter 8: The Calculus
+
+### Introduction
+
+- 
 
 
 
