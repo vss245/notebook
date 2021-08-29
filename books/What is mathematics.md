@@ -11,6 +11,8 @@
 
 ## Chapter 1: The natural numbers
 
+### Introduction
+
 - created by the human mind to count objects, but they have no reference to the characteristics of objects
 - fundamental operations: addition and multiplication
 - theory of natural numbers - arithmetic
@@ -1289,7 +1291,150 @@
 
 ### Introduction
 
+- the invention of calculus is sometimes ascribed only to Newton and Leibniz, but they were, of course, only part of the history
+- two central problems:
+  - the problem of tangents - find tangent lines to a given curve
+  - the problem of quadrature - find the area within a given curve
+- Newton and Leibniz’s contribution to these problems was to recognize the connection between them
+- calculus started with intuitive language, but has been developed into a rigorous discipline
+
+### The integral
+
+- we choose a square with unit sides as the unit of area
+- we can calculate the area of a rectangle easily - if p and q are the sides, then pq is the area
+- the area of a triangle is equal to half the area of a rectangle with the same base b and altitude h ($1/2 bh$)
+  - any plane domain bounded by polygonal lines can be decomposed into triangles and its area can be computed with them
+- what about an area bounded by curves?
+  - naive approach: curvilinear areas are given entities so we can compute their area
+  - we can inscribe in the domain an approximating domain with a polygonal boundary and a well-defined area and so exhaust the whole area
+  - this approach worked but was specific for given curves
+- the basic concept of the calculus is the integral
+  - expression of the area under a curve by means of a limit
+  - e.g. if we have a continuous function like $y = x^2$ or $y=1+\cos x$, then we consider the domain that’s bounded by the x-axis, the perpendiculars to the x-axis and the curve
+  - in general, we cannot decompose it into rectangles and immediately explicitly calculate it
+  - but we can subdivide the interval into small sub-intervals and replace ech strip of the domain by a rectangle
+  - the accuracy will increase the more rectangles we have
+  - if we form a sequence of rectangular approximations to the area under the curve such that the width of the widest rectangle tends to 0, then the sequence will approach the limit A
+  - the area A of the domain is the integral of the function from a to b
+    - $A = \int_a^bf(x)dx$
+    - the integral symbol and “dx” were introduced by Leibniz
+- let’s subdivide the interval from a to b into n small sub-intervals and assume they have equal width $(b-a)/n$
+  - the difference between consecutive x-values, i.e. their length is $\Delta x$
+  - the sum of the area of these rectangles is $S_n=\sum_{j=1}^nf(x_i)*\Delta x$
+  - the limit of this sum as n increases (as the amount of these rectangles goes up is the integral over f(x))
+    - dx was called “infinitesimaly small”, but this isn’t really a rigorous mathematical definition
+- the curve f(x) may lay below the x axis too and the procedure will also remain meaningful
+  - b can be less than a, so that $\Delta x$ is a negative number
+    - $\int_a^bf(x)dx=-\int_b^af(x)dx$
+- the value of the integral remains the same even if we don’t have equidistant points!
+
+### Pre-calculus stage
+
+- does this algorithm hold for concrete cases?
+  - Archimedes performed the integration of a parabolic segment using a device
+  - same for other functions later
+- start with a constant $y = f(x)$, like $f(x)=2$, then the integral of 2 over a to b is $2(b-a)$
+  - compare to the definition as a limit: substitute $f(x_i)=2$ for all the values, we get $2\sum_{j=1}^n\Delta x=2(b-a)$
+- the integration of $f(x)=x$ is equally simple
+  - $\int_a^bxdx$ is the area of a trapezoid which is $(b^2-a^2)/2$
+- $x^2$ is less trivial
+  - choose the lower limit a, then $\Delta x = b/n$
+  - $x_j = j*\Delta x$ 
+  - and $f(x_j) = j^2(\Delta x)^2$, so $S_n = (1^2+2^2+...+n^2)(\Delta x)^2$
+  - since we know that the first parenthesis adds up to $\frac{n(n+1)(2n+1)}{6}$ and delta x is  b/n, then $S_n = b^3/n^3 * (1+1/n)(2+1/n)$
+  - since 1/n will tend to 0 with increasing n, the result will be $b^3/6*1*2=b^3/3$
+
+### Rules for integral calculus
+
+- an important step in the development of calculus occurred when general rules were formulated
+  - the integral of the sum of two functions is equal to the sum of the integrals ($\int f(x)+g(x)dx = \int f(x)dx + \int g(x)dx$)
+  - the integral of a constant times a function is that constant times the integral ($\int cf(x)dx = c\int f(x)$)
+- e.g. to integrate a polynomial, we can take the constants out and split it into integrals of each part of the sum
+
+- if we use a name other than x, nothing changes
+  - also if we make some changes in the coordinate system, e.g. moving it to the right 
+- some important inequalities:
+  - if $b>a$ and the values of $f(x)$ are smaller than those of $g(x)$, then $\int_a^bf(x)dx\leq\int_a^bg(x)dx$
+
+### The derivative
+
+- this concept was only formulated around the 17th century
+- Fermat was interested in determining the maxima and minima of a function
+- we use the tangent to characterize extrema of a function
+  - the direction of the curve at x is given by the slope of the tangent line at x
+  - slope is $\Delta y/\Delta x$ ($\tan \theta$ if $\theta$ is between the line and the x-axis)
+- since we cannot calculate the slope just from 1 point, we use a limiting procedure where we consider another point near the original one and calculate the slope of the line between P and P’
+  - we let P’ move along the curve towards P
+  - slope is the limit of $\Delta y/\Delta x$ as both values approach 0
+- notations for derivative:
+  - $f'(x)$
+  - $Df(x)$
+  - $\frac{dy}{dx}$
+- a negative derivative means a descending curve, a positive one means ascending curve and a derivative of 0 means a horizontal line (e.g. at min, max or saddle point)
+- the simplest non-trivial example is $x^2$
+  - the derivative is $\frac{f(x_1)-f(x)}{x_1-x}=\frac{x^2_1-x^2}{x_1-x}=\frac{(x_1-x)(x_1+x)}{x_1-x}=x_1+x$
+  - plug in x = x, and get $2x$
+- the general formula will be $f'(x^n)=nx^{n-1}$
+- we can obtain similar formula for other functions:
+  - $f'(1/x)=-1/x^2$
+  - $f'(\sqrt x)=1/2\sqrt x$
+
+### Trigonometrical functions
+
+- the question of differentiating trig functions is important
+  - to differentiate sin, we set $x_1-x=h$, so $x_1=x+h$ and $f(x_1)=sin(x+h)$, which we can also expand as $\sin x \cos h + \cos x \sin h$
+  - so if we use the difference between y over the difference between x formula, we get $\cos x(\sin h/h)+\sin x(\cos h-1/h)$
+  - using limits, we find that the first parenthesis tends to 1 and the second one tends to 0, so that the whole formula approaches the cosine of x
+- $f'(\sin x)=\cos x$
+- $f'(\cos x)=-\sin x$
+
+### Continuity
+
+- the differentiability of a function implies continuity - if we can assume that the limit exists, the function is continuous
+
+### Velocity and acceleration
+
+- derivative doesn’t just concern slopes - the concept is related to the rate of change over time
+- if a particle moves along a straight line, its motion is described by $x = f(t)$, where uniform motion will be described by a linear equation $x = a+bt$
+- motion in a plane will be described by two functions, $x = f(t), y= g(t)$
+  - $x=a+bt,y=c+dt$
+  - the coefficients of t will be the two components of velocity
+  - we can eliminate t from the equations to get a parabola (trajectory): $(x-a)d+(y-c)b=0$
+- we can also model the movement of a particle in the x,y-plane under the influence of gravity, where $y = c+dt - 1/2gt^2$ where g is the acceleration due to gravity
+  - we can similarly get the trajectory by eliminating t
+- if a particle moves along a given curve, its motion is the arc from a fixed initial point along the curve
+- if the motion is uniform, we can get the velocity by taking two values of time and measuring the position, then dividing distance by time 
+  - but this will give us velocity during an interval and not instantaneous velocity, so we must let t tend to 0
+  - velocity is the derivative of distance 
+  - acceleration is the derivative of velocity (how velocity changes)
+
+### Geometrical meaning of $f’'(x)$
+
+- the second derivative expresses the rate of change of the slope of the curve (i.e. indicates which way the curve is bent)
+- if the second derivative is positive, that means the slope increases with x and it is concave upward
+- similarly, if the second derivative is negative, then it is concave downward
+- concavity changes at inflection points (wherever the second derivative is 0)
+
+### Maxima and minima
+
+- algorithm:
+  - find the formula for the first derivative 
+  - find where it is equal to 0
+  - find the second derivative formula
+  - find if it is positive or negative for the potential minimum/maximum values
+
+### Differentiation rules
+
+- some general rules have been derived
+- sum rule $k(x)=af(x)+bg(x)$, $k'(x)=af'(x)+bg'(x)$
+- product rule $p(x)=f(x)g(x)$, $p'(x)=f'(x)g(x)+f(x)g'(x)$
+- quotient rule $q(x)=f(x)/g(x)$, $q'(x)=\frac{g(x)f'(x)-f(x)g'(x)}{(g(x))^2}$
+  - assume $g(x)\not=0$
 - 
+
+
+
+
 
 
 
