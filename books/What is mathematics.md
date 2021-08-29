@@ -1430,15 +1430,237 @@
 - product rule $p(x)=f(x)g(x)$, $p'(x)=f'(x)g(x)+f(x)g'(x)$
 - quotient rule $q(x)=f(x)/g(x)$, $q'(x)=\frac{g(x)f'(x)-f(x)g'(x)}{(g(x))^2}$
   - assume $g(x)\not=0$
-- 
+- derivatives of inverse functions are reciprocal
+- if functions are compound, e.g. $z=g(y),y=f(x),k(x)=g(f(x))$, then $k'(x)=g'(y)f'(x)$
 
+### Leibniz’s notation
 
+- the field was dominated by the concepts of “infinitely small quantities” etc
+- the philosophical attitude of the time and the nature of the human mind dictated questions like “what are integrals and derivatives in themselves outside of limiting processes?”
+  - abandoning this attitude can be useful
+- the symbols d in the derivative and integral are considered as symbols for a passage to the limit
 
+### Fundamental theorem of calculus
 
+- the notion of integration and differentiation have been developed before Newton and Leibniz, but the connection between the two has not been revealed for some time
+- in fact, the derivative and the integral are inverse to one another, like addition and subtraction
+- consider the integral of a function $f(x)$ from a fixed lower limit to the variable upper limit u
+  - $F(x)=\int_a^xf(u)du$
+  - the derivative of this integral is equal to the value of f(u) at the point x
+  - $F'(x)=f(x)$
+- the process of integration is undone by the process of differentiation
+- imagine F(x) as an area, then use the analytical process of differentiation:
+  - the different $F(x_1)-F(x)$ is the area between these two locations, which lies between $(x_1-x)m$ and $(x_1-x)M$, where m and M are the greatest and least values of the function (areas of rectangles)
+  - $m \leq \frac{F(x_1)-F(x)}{x_1-x}\leq M$
+  - Let $x_1$ approach x so that both m and M approach the height of the function $f(x)$, then $F'(x)=\lim \frac{F(x_1)-F(x)}{x_1-x}=f(x)$
+  - rate of change of the area under the curve as x increases is equal to the height of the curve at the point x
+- function $G(x)$ for which $G'(x)=f(x)$ is a “primitive function” of f(x)
+  - the theorem then goes like this: $F(x)$, which is the integral of $f(u)$ with a fixed lower limit and variable upper limit x (indefinite integral) is a primitive function of f(x)
+  - it is A primitive function since we can add any constant and the result will be the same, since the derivative of a constant is 0
+- since F(x) is the integral of f(u) between a and x, F(x) is a primitive function of f(x), and $F(x)=G(x)+c$ where c is a constant
+  - $\int_a^bf(u)du=G(b)-G(a)$
 
+### Applications
 
+- the scope of the fundamental theorem is huge, but we can give some indication of its use
+- if we want to find the integral of $x^n$, we can proceed as follows:
+  - the derivative of $x^n$ is $nx^{n-1}$, so the derivative of $x^{n+1}/{n+1}$ will be $x^n$, therefore we can plug in our boundaries and find the area under this curve
+  - this is quicker than finding the limit of a sum as defined above
+- we can define rules for integrals same as we defined them for derivatives and use the formula
+  - the integral of $\sin x$ is $-\cos x$
+  - the integral of $\cos x$ is $\sin x$
+- an interesting result can be obtained from the formula of the derivative of the inverse tangent, $f'(\tan^{-1}x)=1/(1+x^2)$
+  - $\int_0^b1/(1+x^2)dx=\tan^{-1}b$
+  - if b = 1, then $tan^{-1}(1)=\pi/4$, so $\pi/4=\int_0^11/(1+x^2)dx$
+  - this result leads us to the formula for an alternating series for pi from Leibniz
 
+### Exponential function and the logarithm
 
+- calculus provides a much better basis for the logarithm and exponential functions
+  - the usual definition starts with the integral powers $a^n$ of a positive number $a$, then defines $a^{1/n}$ as the nth root of a, then the logarithm of y to the base a $x = \log_ay$ is defined as the inverse of $y = a^x$
+- the natural logarithm is defined as the area under the curve $y = 1/u$ from 1 to x
+- properties of logarithms:
+  - $\log a+\log b = \log ab$
+    - we can derive this property using calculus
+    - consider a function $k(x)=\log(ax)=\log w = F(w)$ where w is ax
+    - $k'(x)=F'(w)f'(x)=a/w=a/ax=1/x$, so $\log(ax)=F(x)+c$
+    - we determine c by substituting for x 
+    - $F(1)=\log 1 = 0$, so k(1) = c and c = log(a), so $\log(ax)=log(a)+log(x)$
+  - $\log 1/x =-\log x$
+  - $\log x^r = r\log x$
+- since log is a continuous monotone function, there must be some number greater than 1 for which we have log(x) = 1 (this number is $e$)
+- we can consider the exponential function (inverse of log), $x = \exp(y)$
+  - $\exp(a)*\exp(b)=\exp(a+b)$
+  - $a = e^{\log a}$
+
+### Differentiating exponential functions
+
+- the natural exponential function is identical with its derivative $\exp'(y)=dx/dy=1/dy/dx=1/1/x=x=\exp(y)$
+- if we differentiate a compound function $f(x)=e^{ax}$, $f'(x)=af(x)$
+- $f(x)=a^x,f'(x)=a^x\log a$
+- we can also find these explicit formulas as limits by writing them out
+  - this also shows us the series for e: $e = 1+1/1!+1/2!+1/3!..$
+
+### Differential equations
+
+- the main role of exponential and trigonometric functions is mathematical analysis and the application to physical problems
+- these functions solve the simplest differential equations
+- a differential equation has a function as its unknown, e.g. if $u = f(x), u' = f'(x)$, then the equation is $u'=u+\sin(xu)$
+- a differential equation may also involve the second derivative or even higher ones
+- solving a differential equation is a generalization of finding the primitive function of a given function $u'=g(x)$, e.g. if $u'=x^2$, then $u = x^3/3+c$
+
+### Exponential functions, radioactivity, compound interest
+
+- the differential equation $u'=u$ has the solution $u=e^x$
+- the function $u=ce^{kx}$ is the solution to an equation $u'=ku$
+- if $x=h(u)$ is the inverse function of $u=f(x)$, then $h'=1/u'=1/ku$
+  - $\log u/k$ is a primitive function of 1/ku, so if $h(u)=\log u/k+b$, then $\log u = kx - bk$, $u = e^{kx}e^{-bk}$ or $ce^{kx}$ since the second part is a constant
+- the differential equation $u'=u$ governs physical processes in which a quantity u of some substance is a function of the time t and the quantity u is changign at the rate proportional to the instantaneous value of u (e.g. a lot of u changes fast)
+  - if we know the initial amount at time 0, we can find the constant by setting t = 0
+  - this equation will describe radioactive disintegration
+    - $u = u_0e^{kt}$, where $s = t_2-t_1$ is called the half-life
+- the phenomenon of compund interest is appoximately exponential: e.g. at3% interest, $u_t=u_0(1+0.03)^t$
+  - the exponent is nt where n is the nth part of a year
+
+### Other examples
+
+- the exponential function often occurs in other combinations, e.g. $u = e^{-kx^2}$ which is the solution to $u'=-2kxu$, defines the normal frequency distribution
+- the trig functions satisfy differential equations:
+  - $u'=-\sin t=-v$
+  - $v' = \cos t = u$
+  - we can differentiate this again and find
+    - $u''=-v'=-u$
+    - $v''-u'=-v$
+    - both functions u and v of t are solutions to $z''+z=0$ which is a second-order DE
+    - this equation with a constant $z''+k^2z=0$ occurs in the study of vibrations
+    - this case assumes to resistance, but if we add another term we can add it: $z''+rz'+k^2z=0$
+    - these damped vibrations are expressed by the formula $e^{-yt/2}\cos \omega t, e^{-yt/2}\sin \omega t, \omega = \sqrt{k^2-(r/2)^2}$
+
+### Newton’s law of dynamics
+
+- Newton considered the motion of a particle with mass m and space coordinates x(t), y(t) and z(t), so the components of acceleration are second derivatives of those
+  - he found that the quantities mx’’, my’’ and mz’’ are components of the force acting on the particle
+  - we can combine the formulas for the field of forces with the general law of dynamics (expression of force in terms of motion) and solve the resulting equation
+- we can show a simpler illustration with vibrations:
+  - assume we have a particle moving along x-axis tied to the origin by an elastic force
+  - if we remove the particle from the equilibrium position, the force will pull it back with an intensity proportional to the extension x ($-k^2x$)
+  - we also assume friction slows the motion, which is proportional to x’ (the velocity)
+  - the total force at any moment is given by $-k^2x-rx'$
+  - according to the general principle, $mx''+rx'+k^2x=0$
+
+### Differentiability
+
+- some functions are not differentiable at certain points, e.g. functions that have a corner like $y = x+|x|$ 
+- another example would be $y = x\sin(1/x)$
+  - this function oscillates infinitely often near x = 0
+- differentiability implies continuity, but not the other way around!
+- the situation is similar with integrals
+  - instead of considering the area under the curve as an obviously existing quantity which can be expressed by the limit of a sum, we define the integral by the limit of a sum
+  - the existence of the limit requires analytical proof
+- differentiability is a restrictive condition, but the actual process is straightforward
+- every continuous function has an integral, but finding it is a difficult task
+
+### Other applications
+
+- the integral can be interpreted in mechanics as expressing the concept of work
+- suppose a mass moves along the x-axis under the influence of a force
+- this mass is concentrated at the point with coordinate x and force is a function of the position
+- if the force is constant, the work is given by (b-a)f
+- if the intensity varies with x, the work done is the integral of f(x) from a to b
+
+### Orders of magnitude
+
+- we often encounter sequences $a_n$ which tend to infinity, while other sequences tend to infinity “faster”
+- we can make this concept precise by saying that $b_n$ has a higher order of magnitude if the ratio $a_n/b_n$ tends to 0 as n increases
+- in many applications it’s important to know the order of magnitude for n! for large values of n
+  - we can study the logarithm of n! ($P=\log2+\log3+\log4+...+\log n$)
+  - the asymptotic value is given by $n\log(n)$
+  - $\int_1^n\log x dx=n\log n-n+1$
+
+### Infinite series and products
+
+- expressing a quantity as an infinite series is a symbol for the statement that s is the limit as n increases of the sequence of partial sums
+- some series are functions of the form $b_i=c_ix^i$ with a constant c - these are power series (limits of polynomials representing $S_n=c_0+c_1x+c_2x^2+...c_nx^n$
+- an expansion of a function in a power series is an approximation of a function with polynomials
+  - we can expand many functions like log, tan etc with polynomials
+  - these expansions are special cases of the general formula of Taylor, who aimed at expanding any function in the form of a power eries by finding a law that expresses the coefficients c in therms of the function and its derivatives 
+
+### Euler’s formula
+
+-  one of the most interesting results from Euler is a connection between complex numbers, sine/cosine and exponential functions
+- we can start with De Moivre’s formula: $(\cos n\phi+i\sin n\phi)= (\cos \phi+i\sin \phi)^n$
+- we can substitute $\phi=x/n$, $(\cos (x/n)+i\sin (x/n))^n$
+- if x is given, cos(x/n) will approach 1 for large n and sin(x/n) is asymptotically equal to x/n, so $\cos x +i\sin x=\lim(1+ix/n)^n$ as n tends to infinity
+  - the formula for e is very similar = $e^z = lim(1+z/n)^n$ as n tends to infinity
+  - so $\cos x + i \sin x = e^{ix}$
+
+### The harmonic series and the zeta function
+
+- a harmonic series is the sum of 1/n for all n
+- does this series converge?
+- the terms of the series approach 0 as we go, but the series does not converge
+- but the series $1+1/2^s+1/3^s+1/4^s...$ can be shown to converge for any value of s over 1
+  - $\zeta(s)=lim(1+1/2^s+1/3^s...)$ as n tends to infinity
+  - the zeta function is related to prime numbers
+  - let p = 2,3,5,7 be any prime, then for s >= 1 $0 < 1/p^s < 1$
+  - $1/(1-1/p^s)=1+1/p^s+1/p^{2s}+1/p^{3s}...$
+  - if we imagine multiplying the equations for all the primes, we will get
+    - one one side, $(1/(1-1/2^s))*(1/(1-1/3^s))...=lim[1/(1-1/p^s)]$
+    - and on the other side we get the zeta function (every integer can be expressed by the product of the powers of distinct primes)
+    - so the zeta function can be represented by the product
+    - the zeta series for 1 diverges to infinity and so we can show that there are infinitely many primes
+
+### Chapter 9: A brief rundown of “recent” developments 
+
+- one of Hilbert’s 23 problems is finding a general algorithm for testing a solution to a Diophantine equation (a polynomial with integer solutions)
+  - it has been shown that no such decision algorithm exists
+  - a byproduct of this proof was a 23-variable polynomial whose positive values are primes
+- Goldbach’s conjecture - every even number greater than 2 is a sum of two primes (the conjecture is that there exist infinitely many primes for which p+2 is also prime)
+  - it has been shown using complex analysis and analytic number theory that every sufficiently large odd number is a sum of three primes
+  - other methods have improved on this solution
+- Riemann hypothesis concerns the zeta function when the variable is complex (if $\zeta(s)=0$ and s is not real, then $s = 1/2+iy$ for some real 1 - e.g. the zeta function has zeros only at complex numbers )
+  - some work has been done with the assumption that this hypothesis is true (which could expose a contradiction)
+  - the zeros of the zeta function can help define the distribution of prime numbers 
+- Fermat’s last theorem $x^n+y^n=z^n$
+  - Fermat conjectured that this equation has no non-zero integer solutions for n>= 3
+  - the 1994 proof by Wiles is hard, but the general outline is as follows: 
+    - the proof relies on elliptic curves, defined by equations like $y^2=ax^3+bx^2+cx+d$
+    - the equation can be rewritten as $(x/z)^n+(y/z)^n=1$ so the point with coordinates (x/z,y/z) lies on the Fermat curve $X^n+Y^n=1$
+    - the theorem is then the assertion that no rational point can lie on the Fermat curve then n >= 3
+    - Frey introduced a curve $y^2=x(x+A^n)(x-B^n)$ which exists only if the theorem is false
+    - the way to prove that it cannot exist is to assume that it does and deduce a contradiction 
+    - Ribet & Frey showed that the Frey’s curve cannot exist if a big unsolved problem in number theory is true (Taniyama’s conjecture)
+      - there is a relationship between the Pythagorean equation $a^2+b^2=c^2$, the unit circle and sin and cos (e.g. Pythagorean equation can be rewritten as (a/c)^2+(b/c)^2=1 which implies that the point (x/c,y/c) lies on the unit circle and $cos^2(\theta)+\sin^2(\theta)=1$ - solving the Pythagorean equastion in integers is equivalent to finding an angle $\theta$ such that both cos and sin of theta are rational numbers (equal to a/c and b/c))
+      - the Taniyama conjecture says that a similar kind of idea can be applied to any elliptic curve, but with different functions for sin and cos
+    - Wiles realized that Frey’s approach can be used with a particular class of elliptic curves
+    - he proved a particular case of the Taniyama conjecture, showing that if M and N are nonzero distinct relatively prime integers such that MN(M-N) is divisible by 16 (this condition makes it semistable), then we can parametrize the elliptic curve $y^2=x(x+M)(x+N)$ by modular functions 
+    - if we apply this theorem to Frey’s curve ($M = A^n, N = -B^n$), then $MN(M-N) = -A^nB^nC^n$ and we have to show that it is a multiple of 16
+    - at least 1 of A,B,C must be even and we assume n>= 5 -     we show that this is true and the quantity above is a multiple of 16
+    - but Ribet has shown that the Taniyama’s conjecture implies that the Frey’s curve cannot be parametrized by modular functions, which is a contradiction so Fermat’s Last Theorem is true
+- The Continuum hypothesis states that the cardinal number of the set of all real numbers is the smallest infinite cardinal greater than that of the integers
+  - this hypothesis has been shown to be  undecidable
+  - the axiomatic method specifies a mathematical object by stating a system of axioms that it satisfies
+  - the truth of this hypothesis depends upon the axioms that are chosen for set theorey
+- Four color theorem
+  - has been proven by checking a lot of cases via computer, but no pencil and paper proof exists
+  - the proof of the Five Color Theorem relies on the existence of a “minimal criminal”, e.g. if the 4 color theorem is false, there must be a map that requires 5 colors
+    - we can restrict the structure of these criminals and show that they do not exist
+  - since then there were many other developments
+- Hausdorff dimension and fractals
+  - Hausdorff has invented a new definition of dimension, which was forgotten until it was applied to the theory of fractals
+  - The Mandelbrot set consists of all complex numbers c such that the sequence $c,c^2+c,(c^2+c)^+c..$ does not tend to infinity
+  - the Hausdorff-Besicovitch dimension of a set (a fractal dimension) is a precise quantity that does not need to be an integer
+  - we can think of a simpler version of a dimension - a scaling dimension - e.g. 2 copies of a line segment are required to make a segment twice the size, 4 copies of a square are needed to make one twice the size, in general it requires $2^d$ copies of a d-dimensional hypercube to make one twice the size and it requires $c = a^d$ copes to make one a times the size
+  - $\log c = d \log a$
+  - $d = \log c/\log a$
+  - the scaling dimension of the Cantor set is 0.63...
+  - the Sierpinski triangle can be doubled in size by assembling 3 copes, so $d = \log 3/\log 2=1.58$
+- Knots
+  - a link is a set of one or more closed loops in 3D space
+  - the individual loops are called the components of the link
+  - if there is only one loop, the link is called a knot
+  - the central problem in link theory is to find ways to tell whether or not two given links or knots are topologically equivalent 
+  - the way to achieve this is to find topological invariants (numbers or objects that do not change when the link is deformed)
 
 
 
