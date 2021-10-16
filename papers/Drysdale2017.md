@@ -2,10 +2,43 @@
 
 Drysdale 2017
 
-- Depression is a heterogeneous syndrome, which has several hundred variations of changes in mood, sleep, energy etc
-- Therefore, there might be multiple forms of depression, but their neurobiological basis is unknown
-- Most previous studies identify clusters of symptoms and test for correlates of those, but the relationship between subtypes and substrates is variable across individuals
-- Another alternative is to cluster patients by shared brain activity features 
-  - rsMRI is a useful modality for this
-  - depression is associated with abnormal functional connectivity in frontostriatal and limbic networks
-  - 
+- Intro:
+  - Depression is a heterogeneous syndrome, which has several hundred variations of changes in mood, sleep, energy etc
+  - Therefore, there might be multiple forms of depression, but their neurobiological basis is unknown
+  - Most previous studies identify clusters of symptoms and test for correlates of those, but the relationship between subtypes and substrates is variable across individuals
+  - Another alternative is to cluster patients by shared brain activity features 
+    - rsMRI is a useful modality for this
+    - depression is associated with abnormal functional connectivity in frontostriatal and limbic networks
+  - Developed a method for defining depression subtypes by clustering subjects according to whole brain patterns of abnormal FC
+- Methods:
+  - Data
+    - Dataset 1: n = 711 (333 patients and 378 controls), cluster discovery performed on n = 220 (out of 333)
+      - Patients had to match DSM depression criteria for a currently active episode (failure to respond to treatment with 2 medications)
+      - Classifier training, CV and optimisation were performed on the full dataset 1
+    - Dataset 2: n = 477 (125 patients and 352 controls), used for validation of classifier
+    - Classifiers were also tested on patients meeting the diagnostic criteria for generalized anxiety disorder and schizophrenia
+    - MRI data obtained from several different sites and from several online open repositories of data
+  - Preprocessing
+    - Template alignment, motion correction etc
+    - Additional checks for whether clustering and classification results were biased by motion
+    - Parcellation:
+      - Functional parcellation: 258 nodes (264 original nodes + 13 depression related nodes -19 nodes with incomplete coverage)
+      - Other parcellations: Desikan Killiany (68 cortical + 22 subcortical ROIs), another functional parcellation (Shirer, Greicus et al).
+    - BOLD extracted from each ROI by averaging across all voxels in an ROI
+    - Multiple linear regression to control for site- and age-related effects (regress the Fisher z-transformed correlation coefficients for each element on ages and dummy variables for sites)
+      - Result 258 x 258 connectivity matrices
+  - Analysis
+    - Cluster discovery analysis was restricted to a subset
+    - To get a low-dimensional representation:
+      - Use Spearman's rank correlation to find statistically significant features that correlate with severity scores
+      - Use canonical correlation analysis to find linear combinations of these features that were correlated with linear combinations of symptoms
+      - Identified two linear combinations of features that were correlated with distinct symptoms combinations (anhedonia related and anxiety related)
+    - Clustering:
+      - Tried k-means or hierarchical clustering
+      - Clusters defined by maximizing the ratio of between cluster variance to within cluster variance
+      - Wilcoxon rank-sum test to identify features that are significantly different in patients
+      - ANOVA - connectivity features that differ most between clusters
+  - Classification:
+    - Classifiers:
+      - logistic regression, LDA, SVM
+      - 

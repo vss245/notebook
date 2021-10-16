@@ -708,4 +708,5 @@
 - Other considerations
   - Some values may truly not be in any cluster - we can use a *mixture model* (soft version of clustering)
   - Clustering methods are not usually robust to perturbations
-  - 
+  
+    
