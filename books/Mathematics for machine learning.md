@@ -219,9 +219,15 @@
 - **coordinates:** consider a space V and a basis B. for any x in V we can get a unique representation $x = \alpha_1b_1+...+\alpha_nb_n$ where the $\alpha$'s are the coordinates!
   - a basis defines a coordinate system
   - e.g. Cartesian coordinates have canonical basis vectors $e_1,e_2$, but any basis of $\R^2$ will define a valid coordinate system
-- 
-
-
-
-
+- **transformation matrix:** consider vector spaces V, W with corresponding ordered bases B and C
+  - consider a linear mapping $\Phi$ from V to W
+  - for j in (1..n), $\Phi(b_j)=\sum_{i=1}^m\alpha_{ij}c_i$
+  - the matrix A whose elements are given by alpha will be the transformation matrix of $\Phi$
+  - the coordinates of $\Phi(b_j)$ with respect to the basis C of W are the j-th column of A
+  - the transformation matrix can be used to map coordinates with respect to an ordered basis in V to coordinates wrt to a basis in W
+- **basis change:**
+  - consider two ordered bases of V (B and B\*) and two ordered bases of W (C and C\*)
+  - A (size m x n) is the transformation matrix of the linear mapping from V to W with respect to B and C
+  - and A\* is the transformation mapping with respect to B\* and C\*
+  - 
 

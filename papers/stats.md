@@ -1,8 +1,6 @@
-# Cluster‐based permutation tests of MEG/EEG data do not establish significance of effect latency or location
+### Cluster‐based permutation tests of MEG/EEG data do not establish significance of effect latency or location (Sassenhagen and Draschkow 2019)
 
-Sassenhagen and Draschkow 2019
-
-### Intro
+Intro
 
 - MEG and EEG experiments result in high-dimensional outcomes with a spatio-temporal structure
 - ERP analysis - average over multiple time points and sensors, use parametric tests of significance (ANOVA or t-tests)
@@ -20,7 +18,7 @@ Sassenhagen and Draschkow 2019
     - additionally, **the spatial location of the cluster is also invisible at this stage, since the p-values refer only to the size of the clusters**
 - **Cluster-based permutation tests do not provide statistical inference for the location of effects**
 
-### How it works
+How it works
 
 - two components: cluster forming algorithm and the algorithm to create a surrogate null distribution
 - example:
@@ -36,7 +34,7 @@ Sassenhagen and Draschkow 2019
     - groups are summarized by a sum of t-values or other methods 
 - the extent of clusters (start time, topography, frequency boundaties) is fixed at this stage and depends strongly on the cluster-forming algorithm (e.g. t-value or other score? raised to a power? 0.05 or 0.01? cluster sum or count? etc)
 
-### Inference stage
+Inference stage
 
 - thresholding voxels can be interpreted as an inferential stage but this stage is affected by repeated tests
 - Second order inference: the cluster structure of the data identified in the first stage is exchangeable between conditions under the null hypothesis
@@ -45,7 +43,7 @@ Sassenhagen and Draschkow 2019
   - done by generating all possible assignments of data points to the condition (satisfactory number of permutations >800)
 - thus the original high dimensional data is reduced to a single number
 
-### How to use results
+How to use results
 
 - the inferential stage does not "see" the coordinates from the first stage, only the cluster sizes
   - no guarantee of the FP rate on any of the points in the cluster
@@ -60,7 +58,7 @@ Sassenhagen and Draschkow 2019
 
 - Clusters can be used as masks but only if they are either established on an independent dataset or using cross-valudation
 
-### How to report results
+How to report results
 
 - Significance of the cluster refers only to the location of its cluster-level statistic in the distribution but not to its location in space, time or frequency
 
