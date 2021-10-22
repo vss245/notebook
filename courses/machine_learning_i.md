@@ -1,0 +1,113 @@
+## Machine Learning I
+
+#### Bayes' Decision Theory
+
+- a framework for building models that yields optimal classifiers (under the condition that we know everything about the data generation process - assumption that is rarely met)
+- helps us understand the properties of the data distribution, prior probabilities of classes (more or less frequent), the criterion to optimize - all these will affect the classifier
+- example from the book - fish on a conveyor belt with sensors that collect a set of measurements
+  - we would like to build a decision model to classify the fish
+  - notation:
+  	- $w_1,w_2$ are classes
+  	- $x \in R^d$ is a vector of observations (e.g. $x_1$ is the length and $x_2$ is the weight)
+  - probability laws:
+  	- $P(w_j)$ - the probability of class j
+  	- $p(x|w_j)$ - density function, e.g. Gaussian distribution of measurements for each class
+  	- $p(x)$ - marginalized density function of measurements (e.g. regardless of class)
+  	- we are interested in $P(w_j|x)$ - probability of being a certain class after observing x (the use case)
+  - Bayes theorem: $$P(w_j|x)=\frac{p(x|w_j)\times P(w_j)}{p(x)}$$ or $$posterior=\frac{likelihood \times prior}{marginal\_likelihood}$$
+  	- prior is the probability of the class before observing data, posterior of the class after observing data
+  	
+  	- applying Bayes theorem yields a distribution of classes given the measurements
+  	- the two posterior curves sum to 1 (an observation must belong to 1 of 2 classes)
+  	- based on the posterior, we can create an optimum decision policy: $\arg \max_j P(w_j|x)$ - decide in favor of the class that is most likely - highest line on the $P(w_j|x)$ graph
+  - we can have alternate formulations of the decision that do not require Bayes' theorem
+  	- $\arg \max_j \frac{p(x|w_j)\times p(w_j)}{p(x)}$
+  	- $p(x)$ is positive and does not depend on j, so we can omit it
+  	- $\arg \max_j p(x|w_j)\times p(w_j)$
+  	- we also often see that $p(x|w_j)$ involves exponentials, so we can apply a log and remove the exp (applying a strictly monotonously increasing function to the argmax does not change it)
+  	- $\arg \max_j \log[p(x|w_j)\times p(w_j)]$
+  	- log of a product is the sum of logarithms
+  	-  $\arg \max_j \log[p(x|w_j)] + \log[P(w_j)]$
+  	-  we need this formulation to simplify the derivations
+-  specific case: data generated from a Gaussian distribution
+
+  -  the data distribution is Gaussian: $$p(x|w_j)=\frac{1}{\sqrt{(2\pi)^d\det(\Sigma_j)}}\exp(-\frac{1}{2}(x-\mu_j)^T\Sigma^{-1}_j(x-\mu_j))$$
+  	-  where $\mu$ is the mean (center) and $\Sigma$ describes the spread of the distribution and the correlation between dimensions
+  	-  exp of a negative term makes it go to 0 as the values move from the center
+  	-  the first term normalizes the distribution to 1
+  -  consider a classifier:
+  	-  assume that the two classes have the same covariance, $\Sigma_1=\Sigma_2$
+  	-  optimal classifier: $\arg \max_j \log p(x|w_j)  + \log P(w_j)$ (the probability density for x according to class + the prior probability of a class $w_j$)
+  	-  due to the assumption above, we use a single matrix $\Sigma$
+  	-  apply the log to $p(x|w_j)$:
+  		-  $$log[p(x|w_j)]=log[\frac{1}{\sqrt{(2\pi)^d\det(\Sigma)}}]+(-\frac{1}{2}(x-\mu_j)^T\Sigma^{-1}(x-\mu_j))$$
+  	-  the first term is constant, so we can remove it from the equation and our optimal classifier is equal to: $$\arg \max_j -\frac{1}{2}(x-\mu_j)^T\Sigma^{-1}(x-\mu_j) + log[P(w_j)]$$
+  	-  we can simplify this to expand the quadratic form: $$\arg \max_j -\frac{1}{2}x^T\Sigma^{-1}x+x^T\Sigma^{-1}\mu_j-\frac{1}{2}\mu_j^T\Sigma^{-1}\mu_j + log[P(w_j)]$$
+  	-  we have constant terms that don't depend on j, so we can remove them: $$\arg \max_j x^T\Sigma^{-1}\mu_j-\frac{1}{2}\mu_j^T\Sigma^{-1}\mu_j + log[P(w_j)]$$
+  	-  **this is basically a linear model now**
+  		-  $v_j=x^T\Sigma^{-1}\mu_j$
+  		-  $b_j=-\frac{1}{2}\mu_j^T\Sigma^{-1}\mu_j + log[P(w_j)]$
+  	-  *optimal boundary:* $\arg \max_j = v_j+b_j$
+  -  practically, we apply these functions to the data and decide based on which value is higher
+  	-  the decision boundary is linear and oriented by mean and covariance
+  	-  changing the prior probabilities moves the decision boundary (due to adding $\log P(w_j)$)
+-  another example: classifying non-numerical data (e.g. a spam classifier):
+	-  represent a message as a collection of binary predicates testing for typical spam words and form a vector
+	-  assume the data is binary $x \in {0,1}^d$
+	-  generated according to a Bernoulli distribution $$P(x_i=0|w_j)=1-q_{ij}$$
+	-  $$P(x_i=1|w_j)=q_{ij}$$
+	-  the probability for one observation given a class $p(x_i|w_{ij}=q_{ij}x_i+(1-q_{ij})\cdot(1-x_i)$
+	-  the probability for the entire multivariate observation (e.g. all the words): $\prod_{i=1}^d[q_{ij}x_i+(1-q_{ij})\cdot(1-x_i)]$
+	-  how do we express the optimal decision boundary $\arg \max_j P(w_j|x)$?
+		-  we know that the optimal classifier is $\arg \max_j \log p(x|w_j) + \log P(w_j)$
+		-  but now we have a different distribution that generates the data
+		-  we apply the log to $P(x|w_j)$, the log of a product becomes a sum of logs: $$\sum \log (q_{ij}x_i+(1-q_{ij})\cdot(1-x_i))$$
+		-  there is no easy way to rewrite the sum of logs, but we can rewrite $q_{ij}x_i$ as $q_{ij}^{x_i}$ because it leads to the same result
+		-  $=\arg \max_j \sum \log q_{ij}^{x_i}(1-q_{ij})^{(1-x_i)} + \log P(w_j) $
+		-  $=\arg \max_j \sum x_i\log q_{ij}+(1-x_i)\log(1-q_{ij}) + \log P(w_j)$
+		-  we also want to rewrite this in a **linear manner**:
+			-  $a_{ij}=\log q_{ij}$
+			-  $b_{ij}=\log (1-q_{ij})$
+			-  $=\arg \max_j x^T a_j +(1-x)^Tb_j+ \log P(w_j)$
+		-  *optimal boundary*: $=\arg \max_j x^T (a_j-b_j) + 1^Tb_j + \log P(w_j)$
+-  cost minimizing: buying a car
+	-  observe the car, assess the probabilities of defects given data: $P(\text{defect}|x)=0.1$ and $P(\text{no defect}|x)=0.9$
+	-  the decision is to buy or not buy the car, we should evalute the cost of each scenario (e.g. buy or not buy given defect or no defect) and take the minimum cost action
+	-  let $(\alpha_k)_k$ be the set of actions and the cost of a certain action is $\lambda$
+	-  then the cost of taking a certain action is $$\lambda(\alpha_k|x)=\sum_{j=1}^C\lambda(\alpha_k|w_j)P(w_j|x)$$
+		-  the cost of an action $\alpha_k$ given the data x is the sum over all possible classes (e.g. defect or no defect) of the cost of this action given the class and the probability of the class given the data
+	-  example values:
+			-  $\text{cost(buy|defect)}=100$
+			-  $\text{cost(buy|no defect)}=-20$
+			-  $\text{cost(not buy|defect)}=0$
+			-  $\text{cost(not buy|no defect)}=0$
+	-  the optimal action will be to minimize costs, $\arg \min_k \lambda(\alpha_k|x)$
+	-  $\lambda(\text{buy}|x)=100\times0.1+(-20)\times0.9=-8$
+	-  $\lambda(\text{not buy}|x)=0\times0.1+0\times0.9=0$
+	-  $\arg \min \{\text{buy}: -8, \text{not buy}: 0\} = \text{buy}$
+-  special case of maximizing classification accuracy (e.g. cost minimization with a particular set of actions and a particular cost function is the problem of maximizing accuracy classification)
+	-  define $\alpha_k$ to be the action of classifying as $w_k$
+	-  $\lambda(\alpha_k|w_j) = -\delta_{jk}$ - cost of classifying something given the class is the Dirac function (indicator) that is equal to 1 if j = k and 0 otherwise (e.g. correct classification or not)
+	-  $\arg \min_k \sum_j - \delta_{jk} \times P(w_j|x)$ - the sum - delta will only appear if j is equal to k 
+	-  $=\arg \min -P(w_k|x)$ which is the same as $\arg \max P(w_k|x)$ (in the accuracy case, we want to maximize, not minimize)
+-  cases above (fish classifier/general Gaussian classifier, non-numerical data, cost minimization) are optimal
+-  but sometimes we need to know the expected error of the classifier (whether it is good enough even if it is optimal)
+	-  $$\begin{equation} P(\text{Error}|x) = \begin{cases} P(w_1|x) & \text{decide } w_2\\ P(w_2|x) & \text{decide } w_1\\ \end{cases}      \end{equation}$$
+	
+- for the optimal Bayes classifier, this reduces to $P(\text{Error}|x)=\min\{P(w_1|x), P(w_2|x)\}$
+	- what is the general error $P(\text{Error})$? $$P(\text{Error})=\int_x P(\text{Error}|x) p(x) dx = \int_x \min\{P(w_1|x), P(w_2|x)\} p(x) dx$$
+	
+- this is the **Bayes error rate** - mostly it cannot be solved analytically due to the min function (has discontinuities)
+
+- we can bound the error rate analytically (i.e. find the minimum value) in multiple ways:
+
+  - e.g. for a binary classification: $P(w_2|x)=1-P(w_1|x)$
+    - we can simplify the integral to $$P(\text{Error})= \int_x \min\{P(w_1|x), 1-P(w_1|x)\} p(x) dx$$ $$\leq \int_x 0.5 p(x) dx = 0.5$$
+    - so the min will always be smaller or equal to 0.5
+  - another bound: 
+       - recall that $P(w_j|x)p(x)=p(x|w_j)P(w_j)$ according to Bayes' theorem
+      - rewrite the integral as $$P(\text{Error})= \int_x \min\{P(w_1|x)p(x), P(w_2|x)p(x)\} dx$$
+     - then we substitute the values from Bayes' theorem:
+    - $$=\int_x \min\{p(x|w_1)P(w_1), p(x|w_2)P(w_2)\} dx$$
+    - $p(x|w_1)$ can also be replaced by the sum over both classes $$=(\sum_j \int_x p(x|w_j) dx)\cdot \min\{P(w_1),P(w_2)\} dx$$ $$=2\cdot \min\{P(w_1),P(w_2)\} dx$$ - 2 is due to the sum over two classes
+    - this bound depends on the class priors (e.g. if one class is unlikely the error goes down)
