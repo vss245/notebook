@@ -285,10 +285,31 @@
 - **building a classifier with Bayes**
 
   - again, we don't have the knowledge of the full data generating process
+  - we consider a labeled dataset containing 2 examples for class 1 and 4 examples for class 2 (drawn from classes $w_1$ and $w_2$ respectively) - same observed values as in building the ML classifier above ($D_1 = 0,2$ and $D_2=0,2,0,1$)
+  - $p(\theta_1|D_1)=\frac{p(D_1|\theta_1)\cdot p(\theta_1)}{\int p(D_1|\theta_1)p(\theta_1)d\theta_i}$
+  - we set the priors $p(\theta_1)=\mathcal{U}(0,1)$ - uniform distribution between 0 and 1
+  - using previous computations,
+    - $\frac{\theta_1^2*(1-\theta_1)^2*1}{\int_0^1\theta_1^2(1-\theta_1)^2*1d\theta_1}$
+    - the integral evaluates to 1/30 => $30\cdot\theta_1^2(1-\theta_1)^2$
+    - if we plot the function, it looks like a bell shape between 0 and 1 and reaches the optimum at 0.5
+    - compared to ML, we don't get a fixed estimate but a probability distribution around 0.5
+  - we can do the same computation with class 2, resulting in $280\cdot\theta_2^4\cdot(1-\theta_2)^3$
+  - the shape is a narrower bell shape between 0 and 1, centered closer to 4/7
 
-  - we consider a labeled dataset containing 2 examples for class 1 and 4 examples for class 2 (drawn from classes $w_1$ and $w_2$ respectively)
+- again, we can try to classify a new datapoint with this:
 
-    
+  - $x = 1$, compute $p(x|w_1,D_1)=\int_0^1p(x|\theta_1)\cdot p(\theta_1|D_1)d\theta_1=\int_0^1\theta_1^3(1-\theta_1)^3\cdot30=\frac{3}{14}=0.214$
+  - same with the other class:
+    - $p(x|w_2,D_2)=\int_0^1p(x|\theta_2)\cdot p(\theta_2|D_2)d\theta_2=\int_0^1\theta_2^5(1-\theta_2)^4\cdot280=\frac{2}{9}=0.22$
+  - to compute the decision, we calculate $\arg \max_j  p(x|w_j,D_j)\cdot p(w_j)$ (argmax of the numerator of the class posterior because the denominator is constant)
+    - for class 1, it's equal to $0.214*0.5$ and for class 2, $0.222*0.5$, so we decide in favor of class 2
+
+- we have contradictory results! MLE tells us to choose class 1, while Bayesian estimation tells us to estimate class 2
+
+  - in Bayesian estimation, we introduce priors - Bayes classifiers are influenced by priors and less by data
+  - Bayes classifiers prefer classes with more data
+
+  ​	
 
    
 
