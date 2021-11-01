@@ -26,31 +26,27 @@
 
 - example from the book - fish on a conveyor belt with sensors that collect a set of measurements
 
-  - we would like to build a decision model to classify the fish
+- we would like to build a decision model to classify the fish
 
   - notation:
-
     - $w_1,w_2$ are classes
     - $x \in R^d$ is a vector of observations (e.g. $x_1$ is the length and $x_2$ is the weight)
-
   - probability laws:
-
     - $P(w_j)$ - the probability of class j
     - $p(x|w_j)$ - density function, e.g. Gaussian distribution of measurements for each class
     - $p(x)$ - marginalized density function of measurements (e.g. regardless of class)
     - we are interested in $P(w_j|x)$ - probability of being a certain class after observing x (the use case)
 
-  - **Bayes theorem: $$P(w_j|x)=\frac{p(x|w_j)\times P(w_j)}{p(x)}$$ or $$posterior=\frac{likelihood \times prior}{marginal\_likelihood}$$**
+- **Bayes theorem: $$P(w_j|x)=\frac{p(x|w_j)\times P(w_j)}{p(x)}$$ or $$posterior=\frac{likelihood \times prior}{marginal\_likelihood}$$**
 
-    - prior is the probability of the class before observing data, posterior of the class after observing data
+  - prior is the probability of the class before observing data, posterior of the class after observing data
 
-    - the left side is the distribution of measurements for each class (e.g. class $w_2$ has a spread of 9 to 14, $w_1$ has two typical sizes)
-    - applying Bayes theorem yields a distribution of classes given the measurements
-    - the two curves sum to 1 (an observation must belong to 1 of 2 classes)
-    - **based on the posterior, we can create an optimum decision policy: $\arg \max_j P(w_j|x)$ - decide in favor of the class that is most likely**
+  - the left side is the distribution of measurements for each class (e.g. class $w_2$ has a spread of 9 to 14, $w_1$ has two typical sizes)
+  - applying Bayes theorem yields a distribution of classes given the measurements
+  - the two curves sum to 1 (an observation must belong to 1 of 2 classes)
+  - **based on the posterior, we can create an optimum decision policy: $\arg \max_j P(w_j|x)$ - decide in favor of the class that is most likely**
 
   - we can have alternate formulations of the decision that do not require Bayes' theorem
-
     - $\arg \max_j \frac{p(x|w_j)\times p(w_j)}{p(x)}$
     - $p(x)$ is positive and does not depend on j, so we can omit it
     - $\arg \max_j p(x|w_j)\times p(w_j)$
@@ -62,24 +58,26 @@
 
 -  specific case: data generated from a Gaussian distribution
 
-   -  ![[gaus.png|500]]
    -  the data distribution is Gaussian: $$p(x|w_j)=\frac{1}{\sqrt{(2\pi)^d\det(\Sigma_j)}}\exp(-\frac{1}{2}(x-\mu_j)^T\Sigma^{-1}_j(x-\mu_j))$$
       -  where $\mu$ is the mean (center) and $\Sigma$ describes the spread of the distribution and the correlation between dimensions
       -  exp of a negative term makes it go to 0 as the values move from the center
       -  the first term normalizes the distribution to 1
-   -  consider a classifier:
-      -  assume that the two classes have the same covariance, $\Sigma_1=\Sigma_2$
-      -  optimal classifier: $\arg \max_j \log[p(x|w_j)] + \log[P(w_j)]$ (the probability density for x according to class + the prior probability of a class $w_j$)
-      -  due to the assumption above, we use a single matrix $\Sigma$
-      -  apply the log to $p(x|w_j)$:
-         -  $$log[p(x|w_j)]=log[\frac{1}{\sqrt{(2\pi)^d\det(\Sigma)}}]+(-\frac{1}{2}(x-\mu_j)^T\Sigma^{-1}(x-\mu_j))$$
-      -  the first term is constant, so we can remove it from the equation and our optimal classifier is equal to: $$\arg \max_j -\frac{1}{2}(x-\mu_j)^T\Sigma^{-1}(x-\mu_j) + log[P(w_j)]$$
-      -  we can simplify this to expand the quadratic form: $$\arg \max_j -\frac{1}{2}x^T\Sigma^{-1}x+x^T\Sigma^{-1}\mu_j-\frac{1}{2}\mu_j^T\Sigma^{-1}\mu_j + log[P(w_j)]$$
-      -  we have constant terms that don't depend on j, so we can remove them: $$\arg \max_j x^T\Sigma^{-1}\mu_j-\frac{1}{2}\mu_j^T\Sigma^{-1}\mu_j + log[P(w_j)]$$
-      -  **this is basically a linear model now**
-         -  $v_j=x^T\Sigma^{-1}\mu_j$
-         -  $b_j=-\frac{1}{2}\mu_j^T\Sigma^{-1}\mu_j + log[P(w_j)]$
-      -  *optimal boundary:* $\arg \max_j = v_j+b_j$
+
+-  consider a classifier:
+
+   -  assume that the two classes have the same covariance, $\Sigma_1=\Sigma_2$
+   -  optimal classifier: $\arg \max_j \log p(x|w_j) + \log p(w_j)$ (the probability density for x according to class + the prior probability of a class $w_j$)
+   -  due to the assumption above, we use a single matrix $\Sigma$
+   -  apply the log to $p(x|w_j)$:
+      -  $$log[p(x|w_j)]=\log \frac{1}{\sqrt{(2\pi)^d\det(\Sigma)}}+(-\frac{1}{2}(x-\mu_j)^T\Sigma^{-1}(x-\mu_j))$$
+   -  the first term is constant, so we can remove it from the equation and our optimal classifier is equal to: $$\arg \max_j -\frac{1}{2}(x-\mu_j)^T\Sigma^{-1}(x-\mu_j) + \log P(w_j)$$
+   -  we can simplify this to expand the quadratic form: $$\arg \max_j -\frac{1}{2}x^T\Sigma^{-1}x+x^T\Sigma^{-1}\mu_j-\frac{1}{2}\mu_j^T\Sigma^{-1}\mu_j + \log P(w_j)$$
+   -  we have constant terms that don't depend on j, so we can remove them: $$\arg \max_j x^T\Sigma^{-1}\mu_j-\frac{1}{2}\mu_j^T\Sigma^{-1}\mu_j + \log P(w_j)$$
+   -  **this is basically a linear model now**
+      -  $v_j=x^T\Sigma^{-1}\mu_j$
+      -  $b_j=-\frac{1}{2}\mu_j^T\Sigma^{-1}\mu_j + \log p(w_j)$
+   -  *optimal boundary:* $\arg \max_j = v_j+b_j$
+
    -  practically, we apply these functions to the data and decide based on which value is higher
       -  the decision boundary is linear and oriented by mean and covariance
       -  changing the prior probabilities moves the decision boundary (due to adding $\log P(w_j)$)
@@ -183,7 +181,7 @@
 
 - assume that each example is generated independently and drawn from the same dataset $p(x|\theta)$ - in this case, the entire probability of the dataset given the parameters will be: $$p(D|\theta)=\prod_{k=1}^N p(x_k|\theta)$$
 
-  - this is the likelihood of theta with respect to dataset D
+  - this is the likelihood of parameters theta with respect to dataset D, e.g. $p(D|\theta)=L(\theta|D)$
 
 - **best parameters are given by $\hat\theta=\arg\max_\theta p(D|\theta)$ - maximizing the likelihood **
 
@@ -236,11 +234,12 @@
   - we consider a labeled dataset containing 2 examples for class 1 and 4 examples for class 2 (drawn from classes $w_1$ and $w_2$ respectively)
     - we know the family of the functions but not the parameters $\mu$
     - we also know classes occur with equal probabilities
-  - $p(w_1)=0.5$, $p(w_2)=0.5$
-  - $p(x=k|\theta_1)=(1-\theta_1)^k \theta_1$
-  - $p(x=k|\theta_2)=(1-\theta_2)^k \theta_2$
-  - $D_1 = {0,2}$
-  - $D_2 = {0,2,0,1}$
+  - given:
+    - $p(w_1)=0.5$, $p(w_2)=0.5$
+    - $p(x=k|\theta_1)=(1-\theta_1)^k \theta_1$
+    - $p(x=k|\theta_2)=(1-\theta_2)^k \theta_2$
+    - $D_1 = {0,2}$
+    - $D_2 = {0,2,0,1}$
   - we want to maximize $p(D_1|\theta_1)$ - the likelihood of our parameters:
     - we compute the product of $p(x=k|\theta_1)$ for all the observed values of x
     - for $D_1 = 0, 2$, we get $$p(D_1|\theta_1)=\theta_1^2\cdot(1-\theta_1)^2$$
@@ -301,13 +300,37 @@
   - $x = 1$, compute $p(x|w_1,D_1)=\int_0^1p(x|\theta_1)\cdot p(\theta_1|D_1)d\theta_1=\int_0^1\theta_1^3(1-\theta_1)^3\cdot30=\frac{3}{14}=0.214$
   - same with the other class:
     - $p(x|w_2,D_2)=\int_0^1p(x|\theta_2)\cdot p(\theta_2|D_2)d\theta_2=\int_0^1\theta_2^5(1-\theta_2)^4\cdot280=\frac{2}{9}=0.22$
-  - to compute the decision, we calculate $\arg \max_j  p(x|w_j,D_j)\cdot p(w_j)$ (argmax of the numerator of the class posterior because the denominator is constant)
+  - to compute the decision, we calculate $\arg \max_j  p(x|w_j,D_j)\cdot p(w_j)$ (as before, argmax of the numerator of the class posterior because the denominator is constant)
     - for class 1, it's equal to $0.214*0.5$ and for class 2, $0.222*0.5$, so we decide in favor of class 2
 
 - we have contradictory results! MLE tells us to choose class 1, while Bayesian estimation tells us to estimate class 2
 
   - in Bayesian estimation, we introduce priors - Bayes classifiers are influenced by priors and less by data
-  - Bayes classifiers prefer classes with more data
+  - Bayes classifiers prefer classes supported by more data
+
+- **estimating Gaussian parameters with ML and Bayesian estimation**
+
+  - consider a data density $p(x|\mu)=\mathcal{N}(\mu,\sigma^2)$ with an unknown mean $\mu$ (assume fixed variance)
+  - ML approach: $\hat\mu=\frac{1}{n}\sum_{i=1}^Nx_i$ (empirical mean, calculated above)
+  - Bayesian approach: assume some prior distribution over the mean $p(\mu)=\mathcal{N}(\mu_0,\sigma^2_0)$
+    - using Bayes theorem, we get $p(\mu|D)=\frac{p(D|\mu)p(\mu)}{p(D)}$ 
+    - assume all datapoints are independent, $p(D|\mu)$ is equal to the product of $p(x_k|\mu)\cdotp(\mu)$ over all k
+      - $p(\mu|D)=\alpha\prod_{k=1}^np(x_k|u)p(u)$
+    - we can expand this using the formula for the Gaussian distribution, e.g. 
+    - $$p(\mu|D)=\alpha\prod_{k=1}^n\frac{1}{\sqrt{2\pi\sigma}}\exp[-0.5(\frac{x_k-\mu}{\sigma})^2] \frac{1}{\sqrt{2\pi\sigma}}\exp[-0.5(\frac{\mu-\mu_0}{\sigma})^2]$$
+    - (both the probability of x given the mean and the prior probability of the mean are Gaussian)
+  - solving this will give us a new Gaussian distribution with the required parameters
+    - $\mu_n = \frac{\sigma_n^2}{\sigma^2_n/n}\hat\mu_0$
+    - $\sigma^2_n=(\frac{1}{\sigma^2/n}+\frac{1}{\sigma_0^2})^{-1}$
+    - the mean estimate will be pulled towards the prior if the n is small (e.g. the fraction will move towards 1)
+    - the mean estimate has a variance term $\sigma^2_n$ which can help us estimate the confidence
+    - more observed data will bring the Bayes posterior model towards the ML estimator
+
+- **summary**:
+
+  - we typically don't know parameters of distributions that generate the data
+  - we have two approaches of learning the parameters of these distributions, maximum likelihood estimation and Bayesian inference
+  - Bayesian inference is more difficult, since it requires integration, but it incorporates some interesting functionalities (we can include priors informed by previous knowledge and we can obtain confidence estimates on our results)
 
   ​	
 
