@@ -39,6 +39,7 @@
 
 - **Bayes theorem: $$P(w_j|x)=\frac{p(x|w_j)\times P(w_j)}{p(x)}$$ or $$posterior=\frac{likelihood \times prior}{marginal\_likelihood}$$**
 
+  - ![img](img/ml/duda1.png)
   - prior is the probability of the class before observing data, posterior of the class after observing data
 
   - the left side is the distribution of measurements for each class (e.g. class $w_2$ has a spread of 9 to 14, $w_1$ has two typical sizes)
@@ -58,10 +59,11 @@
 
 -  specific case: data generated from a Gaussian distribution
 
-   -  the data distribution is Gaussian: $$p(x|w_j)=\frac{1}{\sqrt{(2\pi)^d\det(\Sigma_j)}}\exp(-\frac{1}{2}(x-\mu_j)^T\Sigma^{-1}_j(x-\mu_j))$$
-      -  where $\mu$ is the mean (center) and $\Sigma$ describes the spread of the distribution and the correlation between dimensions
-      -  exp of a negative term makes it go to 0 as the values move from the center
-      -  the first term normalizes the distribution to 1
+   - ![img](img/ml/gaus.png)
+   - the data distribution is Gaussian: $$p(x|w_j)=\frac{1}{\sqrt{(2\pi)^d\det(\Sigma_j)}}\exp(-\frac{1}{2}(x-\mu_j)^T\Sigma^{-1}_j(x-\mu_j))$$
+     -  where $\mu$ is the mean (center) and $\Sigma$ describes the spread of the distribution and the correlation between dimensions
+     -  exp of a negative term makes it go to 0 as the values move from the center
+     -  the first term normalizes the distribution to 1
 
 -  consider a classifier:
 
@@ -196,9 +198,9 @@
    - if we look at the Gaussian distribution, it is not concave - but we can transform it to be by applying a logarithm (log of products becomes a sum of the logs and the exponential disappears) - *log likelihood*
      -  then we can find the best parameters by solving $\nabla_\theta log P(D|\theta)=\sum_{k=1}^N[-0.5 \log (2\pi)-0.5(x_k-\theta)^2]$
       -  gradient of a sum is a sum of gradients:
-         $$\nabla_\theta log P(D|\theta)=\sum_{k=1}^N\nabla_theta -0.5 \log(2\pi) - \nabla_\theta -0.5(x_k-\theta)^2$$
+         $$\nabla_\theta log P(D|\theta)=\sum_{k=1}^N\nabla_\theta [-0.5 \log(2\pi)]- \nabla_\theta [-0.5(x_k-\theta)^2]$$
       -  the first gradient is constant so = 0
-         $$=\sum_{k=1}^N \nabla_\theta -0.5(x_k-\theta)^2$$
+         $$=\sum_{k=1}^N \nabla_\theta [-0.5(x_k-\theta)^2]$$
       -  apply chain rule for the second half
          $$=\sum_{k=1}^N -(x_k-\theta)\cdot - 1$$
           $$\sum_{k=1}^N -(x_k-\theta)\cdot - 1=0$$
@@ -210,7 +212,7 @@
 
  -  generalize to the multivariate case:
 
-    -  multivariate Gaussian: $$\log p(D|\theta) = \sum_{k=1}^N = -0.5 \log[(2\pi)^d det(\Sigma)]-0.5(x_k-\mu)^T\Sigma^{-1}(x_k-\mu)$$
+    -  multivariate Gaussian: $$\log p(D|\theta) = \sum_{k=1}^N -0.5 \log[(2\pi)^d det(\Sigma)]-0.5(x_k-\mu)^T\Sigma^{-1}(x_k-\mu)$$
      -  assuming sigma is fixed, what is the optimal mean vector?
      -  in a Gaussian distribution, the covariance matrix is positive definite ($\Sigma$, but also $\Sigma^{-1}$)
      -  if a Hessian (second order partial derivatives) of a function is negative definite, then the function is concave 
