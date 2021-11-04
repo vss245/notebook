@@ -334,7 +334,128 @@
   - we have two approaches of learning the parameters of these distributions, maximum likelihood estimation and Bayesian inference
   - Bayesian inference is more difficult, since it requires integration, but it incorporates some interesting functionalities (we can include priors informed by previous knowledge and we can obtain confidence estimates on our results)
 
-  ​	
+### Lecture 3: Principal Component Analysis
+
+- idea: reducing dimensionality in a linear manner
+
+- we have data in d dimensions, but the real data can exist on a subspace within it 
+
+  - standard regression or classification techniques can become ill-defined or unsuitable numerically (e.g. images with a lot of pixels)
+
+- ill-conditioning:
+
+  - assume data is generated according to a multivariate Gaussian $p(x|w_j)=\mathcal{N}(\mu_j,\Sigma)$ with class priors $p(w_j)$
+  - the optimal classifier is $\arg\max_j \log p(x|w_j)+\log p(w_j)$
+  - $=\arg\max_j x^T\Sigma^{-1}\mu_j-0.5\mu_j\Sigma^{-1}\mu_j+\log p(w_j)$
+  - this involves the inverse of a covariance matrix (or an estimator $\hat\Sigma$ of it because we may not know the full covariance matrix)
+  - how do we compute $\hat\Sigma^{-1}$ Accurately?
+
+-  example of an estimator:
+
+  - e.g. ML estimator: $\hat\Sigma=\frac{1}{N}\bar{X}\bar{X}^T$
+  - this may not be accurate in the case where $d \geq N$ and if $\bar{X}$ is not full-rank, then it is not invertible
+  - eigenvalues may not be accurately estimated (bigger ones are over-estimated, small ones are under-estimated)
+
+- ways to solve this: 
+
+  - reduce the dimensionality 
+  - regularize the model
+
+- curse of dimensionality:
+
+  - when the dimensionality increases, the volume of the space increases very fast
+
+- PCA linearly maps the data from a high-dimensional space to a low dimensional space (e.g. from 2d to a line)
+
+  - which line? the one that minimizes the noise and maximizes the signal
+  - given a dataset $X \in \R^d$, find a one-dimensional subspace so that the data projected on that subspace has minimum distance to the original data
+    - the projection vector $w$
+    - reconstructed projected data: $\hat x=ww^Tx$
+      - with $\norm{w}=1$
+  - to fit PCA, we minimize the difference (e.g. the reconstruction error)
+    - $\arg\min_w[\frac{1}{N}\sum_{k=1}^N\norm{x_k-ww^Tx}^2]$
+    - if we project to all d dimensions, the error would be 0
+    - if we project to d-1 dimensions, there is already some error
+  - same approach: maximizing the variance of projected data
+    - projection: $h = w^Tx$ with $\norm{w}=1$
+    - $\arg\max_w[\frac{1}{N}\sum_{k=1}^N(w^Tx_k-E[w^Tx])^2]$
+    - if the data is centered with mean of 0, this will become
+    - $\arg\max_w[\frac{1}{N}\sum_{k=1}^N(w^Tx_k)^2]$ 
+  - e.g. we are either **minimizing the spread perpendicular to w** or **maximizing the spread along w**
+
+- we can show that noise minimization can be converted into variance maximization by vector manipulation
+
+  - the norm in $\arg\min_w[\frac{1}{N}\sum_{k=1}^N\norm{x_k-ww^Tx}^2]$ becomes $(x_k-ww^Tx)^T(x_k-ww^Tx)$ and can be multiplied out
+  - then we can rewrite the multiplications $\arg\min_w[\frac{1}{N}\sum_{k=1}^N -2(x_k^Tw)^2+x_k^Tww^Tww^Tx_k]$
+  - the last part becomes $(x_k^Tw)^2$ because $w^Tw$=1 and $x_k^Tww^Tx_k$ Is just $(x_k^Tw)^2$
+  - minimizing $-(x_k^Tw)^2$ is the same as maximizing $(x^T_kw)^2$
+
+- potential issues
+
+  - centering the data is important, because otherwise the result will be wrong! (e.g. subtract the mean along all dimensions)
+  - PCA is not very robust to outliers as well
+
+- computing principal components
+
+  - we formulated it as maximizing something using a unit constraint on w, but what is the actual numerical procedure?
+  - we can use Lagrange multipliers
+  - if we need to find $\arg\max f(\theta)$ subject to $g(\theta)=0$, we construct a Lagrangian $\mathcal{L}(\theta,\lambda)=f(\theta)+\lambda g(\theta)$
+  - lambda is the Lagrange multiplier
+  - then we set the gradient of the Lagrangian to 0
+  - 2D example:
+    - problem: $\arg\max_\theta[1-\theta_1^2+\theta_2^2]$ subject to $\theta_1+\theta_2=1$
+    - build Lagrangian
+    - $\mathcal{L}(\theta,\lambda)=1-\theta_1^2+\theta_2^2+\lambda (\theta_1+\theta_2)$
+    - solve gradients with respect to both thetas and lambda and solve for theta
+
+- PCA solution
+
+  - $\arg\max_w[\frac{1}{N}\sum_{k=1}^N(w^Tx_k)^2]$  with $\norm{w}=1$
+  - this can be rewritten as $\arg\max_w[w^T(\frac{1}{N}\sum_{k=1}^Nx_k^Tx)w]$ 
+  - the middle part in the parenthesis is the covariance matrix
+  - rewritten problem $\arg\max_w w^T\hat\Sigma w$ and $\norm{w}^2=1$
+  - we build a Lagrangian multiplier $\mathcal{L}(w,\lambda)=w^T\hat\Sigma w\cdot\lambda(1-w^2)$
+  - set the gradient of the Lagrangian to 0
+  - $\hat\Sigma w = \lambda w$ (the solution is the eigenvector of $\hat\Sigma$)
+
+- we can generalize this to extracting more components:
+
+  - compute the first principal component
+  - remove it from the data
+  - resulting sequence of principal components corresponds to the eigenvectors of $\hat\Sigma$
+  - so in practice, we can just compute the eigenvalues of the covariance matrix 
+
+- PCA rotates the data into the new coordinate axes ($w_1x$ and $w_2x$)
+
+- using singular value decomposition (SVD)
+
+  - the general approach is computing the covariance and doing eigenvalue decomposition, but we can perform stable PCA computation by doing singular value decomposition, which is faster and more stable
+  - SVD factorizes $M = U\Lambda V$
+    - U = eigenvectors of $MM^T$ 
+    - V = eigenvectors of $M^TM$
+    - the square roots of the eigenvalues of $MM^T$ are on the diagonal of $\Lambda$
+  - SVD has complexity $\mathcal{O}(min(N^2d,d^2N))$, so if $d \approx N$, the complexity is about the complexity of computing eigenvectors of $\hat\Sigma$ which is $\mathcal{O}(d^3)$
+  - so SVD can be prohibitive for large datasets
+  - but in practice, we only need to compute the first couple of principal components
+
+- getting only first components
+
+  - this can be done using an iterative power algorithm (this always converges and is very fast) to find the leading eigenvector
+  - then we can use this method iteratively: project the first component out, find the next leading one
+
+- applications
+
+  - can be used to visualize how examples of different classes are related
+  - canonical coordinates representing individual features can also be projected in the PCA space
+  - data compression - how many components do we actually need to represent something (e.g. faces)?
+  - denoising - we can use PCA to remove uninformative noise
+  - artifact removal - e.g. in EEG recordings
+
+- the main assumption of PCA is that the data is drawn from a Gaussian
+
+  - there have been methods that have been developed to extend PCA, e.g. kernel PCA (in feature space), CCA (maximize correlation and not variance)
+
+    
 
    
 
