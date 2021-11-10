@@ -434,7 +434,7 @@
     - U = eigenvectors of $MM^T$ 
     - V = eigenvectors of $M^TM$
     - the square roots of the eigenvalues of $MM^T$ are on the diagonal of $\Lambda$
-  - SVD has complexity $\mathcal{O}(min(N^2d,d^2N))$, so if $d \approx N$, the complexity is about the complexity of computing eigenvectors of $\hat\Sigma$ which is $\mathcal{O}(d^3)$
+  - SVD has complexity $\mathcal{O}(\min(N^2d,d^2N))$, so if $d \approx N$, the complexity is about the complexity of computing eigenvectors of $\hat\Sigma$ which is $\mathcal{O}(d^3)$
   - so SVD can be prohibitive for large datasets
   - but in practice, we only need to compute the first couple of principal components
 

@@ -75,7 +75,7 @@
 	- a computer translates the data from binary to images
 	- PACS - picture archiving clinical system
 	
-## Lecture 2 - Introduction to Neuroanatomy
+## Lecture 2 - Introduction to Neuroanatomy I
 - embryology - development of the organism from two cells
 - <img src="img/mri/blastula.png" alt="blastula" style="zoom:50%;" />
 - the blastula (early organism) has three layers
@@ -91,7 +91,7 @@
 	- the spine is now formed and has the intermediate, dorsal and ventral horns (gray matter), also the white matter and the dorsal root
 	- <img src="img/mri/spine.jpg" alt="spine segments" style="zoom:67%;" />
 	- we share a regionalized spine with other mammals: cervical, thoracic, lumbar, sacral and coccygeal + cauda equina at the end (horse's tail)
-	- the white matter is only present at the cervical and thoracic ends (no more myelin later, only nerves floating in CSF)
+	- the white matter is only present at the cervical and thoracic ends (no more myelin later, only nerves floating in CSF - that's why we can do CSF biopsies easily)
 	- each segment of the spinal cord has two pairs of nerves
 - the brain will be a segmented tube:
   - <img src="img/mri/brain.jpg" alt="brain vesicles" style="zoom:67%;" />
@@ -162,7 +162,7 @@
 	- **echo time**: from RF to signal
 	- **repetition time**: from one RF to next RF
 - basic types of MR sequences:
-  - <img src="img/mri/gradecho.png" alt="gradient and echo" style="zoom:50%;" />
+  - <img src="img/mri/gradecho.png" alt="gradient and echo" style="zoom:70%;" />
   - **gradient echo**
     - RF pulse ($< 90^o$)
     - very fast
@@ -185,7 +185,7 @@
 	- the entire image is called the FOV (field of view)
 - how does the scanner localize signals?
   - $B_0$ runs parallel to the body
-  - <img src="img/mri/gradients.png" alt="gradients" style="zoom:50%;" />
+  - <img src="img/mri/gradients.png" alt="gradients" style="zoom:70%;" />
   - **slice selection gradient** - the magnetic field is slightly varied over z (from + to 0 to -)
   	- Larmor frequency is dependent on the strength of the field and the element that the proton is of
   	- changing the magnetic field changes the Larmor frequency
@@ -207,3 +207,136 @@
 	- even longer TR and TE - FLAIR (sensitive to abnormalities)
 	- which properties determine the image depends on which curves (T1 or T2) for different tissues are further from each other
 	- http://xrayphysics.com/contrast.html
+
+## Lecture 4 - Introduction to Neuroanatomy II
+
+- after the neuropores (openings in neural tube) close, the neural tube starts growing "bubbles" at around the 4th week of gestation - these are the cerebral vesicles 
+
+  - cavities inside the vesicles creates the ventricles
+
+- CNS developers from caudal to cranial (e.g. from medulla/pons to cerebrum)
+
+- the telencephalon makes up about 85% of the total weight of the brain
+
+- brainstem
+
+- <img src="img/mri/brainstem.jpg" alt="gradients" style="zoom:70%;" />
+
+  - elongation of the spinal cord
+  - spinal cord => pyramidal decussation (fibers crossing) => medulla oblongata => pons
+  - 12 cranial nerves and 15 nuclei 
+    - olfactory (olfactory bulb), optical (thalamus), oculomotor, trochlear (mesencephalon), trigeminal, abducens, facial, vestibulocochlear (pons), glossopharyngeal, vagus, accessory, hypoglossal (medulla)
+    - some nerves contribute fibers and nuclei to others 
+  - long tracts: corticospinal, corticobulbar, medial lemniscal, spinothalamic (motor and sensory information)
+  - cerebellum 
+  - <img src="img/mri/cerebellum.png" alt="gradients" style="zoom:100%;" />
+    - input: cerebral cortex, vestibular system, ascending pathways (plans for movement, proprioception)
+    - output: cranial nerve nuclei, red nucelus, reticular formation, hypothalamus, cerebral cortex (influence descending pathways)
+    - this input goes into cortex cerebellaris (gray matter has Purkinje cells that do the computing)
+    - cerebellar pathways are double-crossed (nerves switch sides twice)
+    - types of tasks: processing for limbs (hemispheres), balance and eye movements (flocculonodular node), trunk movement (vermis) (alcohol disproportionately produces atrophy in the vermis)
+  - reticular formation: ARAS (ascending reticular activating system) - attention and alertness, also includes primitive reflexes (breathing, vomiting)
+  - we can't see nuclei in MRI, but can see some nerves
+
+- mesencephalon
+
+- <img src="img/mri/mesencephalon.jpg" alt="gradients" style="zoom:40%;" />
+
+  - basal ganglia
+  - substantia nigra - Parkinson's disease
+  - tectum - colliculi (superior and inferior), reflexes
+  - tegmentum - cranial nerve nuclei, red nuclei
+
+- diencephalon
+
+- <img src="img/mri/diencephalon.jpg" alt="gradients" style="zoom:70%;" />
+
+  - 3rd ventricle 
+  - thalamus (2 thalami take up the most space)
+    - relay nucleus consisting of multiple sensory nuclei (medial geniculate - hearing, lateral geniculate - vision)
+    - also includes cerebellum and basal ganglia information 
+  - hypothalamus
+    - metabolism and homeostasis
+    - secretes vasopressin and oxytocin (released into blood)
+    - also secretes a hormone only into the portal blood system (activates the pituitary)
+      - TRH, GHRH, GnRH, CRH, DA (modulates lactation) - then pituitary secretes them into the bloodstream 
+  - pituitary gland
+  - subthalamus 
+  - epithalamus (circadian rhythm)
+
+- telencephalon
+
+- <img src="img/mri/telencephalon.jpg" alt="gradients" style="zoom:70%;" />
+
+  - frontal lobe (central sulcus)
+  - temporal lobe (sylvian fissue)
+  - parietal lobe (parietal-occipital sulcus)
+  - occipital lobe
+  - cortices: primary, association, higher order cortices, also limbic system
+  - language
+    - wernicke's area - speech perception
+    - broca's area - speech production
+    - dominant hemisphere hosts speech
+
+- motor pathway:
+
+- <img src="img/mri/motor.jpg" alt="gradients" style="zoom:70%;" />
+
+  - conscious movement: 
+    - lateral corticospinal tract
+    - anterior corticospinal tract
+  - <img src="img/mri/sensory.jpg" alt="gradients" style="zoom:40%;" />
+  - conscious sensation:
+    - dorsal column / medial lemniscal
+    - anterolateral system / spinothalamic tract
+    - spinocerebellar tract
+
+- vision system
+
+- <img src="img/mri/visual.png" alt="gradients" style="zoom:70%;" />
+
+  - overlapping visual fields from two eyes
+  - some of the fibers (nasal) cross at the optic chasm 
+  - projects to lateral geniculate bodies => V1
+
+- hearing
+
+- <img src="img/mri/hearing.jpg" alt="gradients" style="zoom:70%;" />
+
+  - cochlear nerve => cochlear nuclei => inferior colliculi 
+  - hearing is much more ipsilateral
+
+- olfaction
+
+- <img src="img/mri/olfactory.png" alt="gradients" style="zoom:70%;" />
+
+  - olfactory neurons/receptors in the nose synapse in the sensory bulb => primary olfactory cortex (periform cortex)
+  - synapse to the amygdala, uncus and parahippocampal gyrus
+  - do not go through the thalamus
+
+- limbic system
+
+- <img src="img/mri/limbic.png" alt="gradients" style="zoom:70%;" />
+
+  - cingulate sulcus, cingulate gyrus, rhinal sulcus, parahippocampal gyrus, collateral sulcus, temporal pole
+  - behavior/emotions/memory
+
+- basal ganglia
+
+- <img src="img/mri/basal.jpg" alt="gradients" style="zoom:70%;" />
+
+  - also spans telencephalon and diencephalon
+  - nucleus caudaus, globus pallidus, amygdala, putamen etc
+  - motor programs
+
+- medical examples
+
+  - damage to the ventral pons - both sensory and motor systems are affected
+  - right hand and face numbness - could be primary sensory or trigeminal+other nerves damage, but probably thalamus
+
+- treatment window 
+
+  - 4 hours (can be treated with thrombolitic drugs)
+  - recanalization - taking out the clot 
+
+  
