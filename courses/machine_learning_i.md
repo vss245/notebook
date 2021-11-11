@@ -337,11 +337,9 @@
 ### Lecture 3: Principal Component Analysis
 
 - idea: reducing dimensionality in a linear manner
-
 - we have data in d dimensions, but the real data can exist on a subspace within it 
 
   - standard regression or classification techniques can become ill-defined or unsuitable numerically (e.g. images with a lot of pixels)
-
 - ill-conditioning:
 
   - assume data is generated according to a multivariate Gaussian $p(x|w_j)=\mathcal{N}(\mu_j,\Sigma)$ with class priors $p(w_j)$
@@ -349,22 +347,18 @@
   - $=\arg\max_j x^T\Sigma^{-1}\mu_j-0.5\mu_j\Sigma^{-1}\mu_j+\log p(w_j)$
   - this involves the inverse of a covariance matrix (or an estimator $\hat\Sigma$ of it because we may not know the full covariance matrix)
   - how do we compute $\hat\Sigma^{-1}$ Accurately?
-
 -  example of an estimator:
 
   - e.g. ML estimator: $\hat\Sigma=\frac{1}{N}\bar{X}\bar{X}^T$
   - this may not be accurate in the case where $d \geq N$ and if $\bar{X}$ is not full-rank, then it is not invertible
   - eigenvalues may not be accurately estimated (bigger ones are over-estimated, small ones are under-estimated)
-
 - ways to solve this: 
 
   - reduce the dimensionality 
   - regularize the model
-
 - curse of dimensionality:
 
   - when the dimensionality increases, the volume of the space increases very fast
-
 - PCA linearly maps the data from a high-dimensional space to a low dimensional space (e.g. from 2d to a line)
 
   - which line? the one that minimizes the noise and maximizes the signal
@@ -382,19 +376,16 @@
     - if the data is centered with mean of 0, this will become
     - $\arg\max_w[\frac{1}{N}\sum_{k=1}^N(w^Tx_k)^2]$ 
   - e.g. we are either **minimizing the spread perpendicular to w** or **maximizing the spread along w**
-
 - we can show that noise minimization can be converted into variance maximization by vector manipulation
 
   - the norm in $\arg\min_w[\frac{1}{N}\sum_{k=1}^N\norm{x_k-ww^Tx}^2]$ becomes $(x_k-ww^Tx)^T(x_k-ww^Tx)$ and can be multiplied out
   - then we can rewrite the multiplications $\arg\min_w[\frac{1}{N}\sum_{k=1}^N -2(x_k^Tw)^2+x_k^Tww^Tww^Tx_k]$
   - the last part becomes $(x_k^Tw)^2$ because $w^Tw$=1 and $x_k^Tww^Tx_k$ Is just $(x_k^Tw)^2$
   - minimizing $-(x_k^Tw)^2$ is the same as maximizing $(x^T_kw)^2$
-
 - potential issues
 
   - centering the data is important, because otherwise the result will be wrong! (e.g. subtract the mean along all dimensions)
   - PCA is not very robust to outliers as well
-
 - computing principal components
 
   - we formulated it as maximizing something using a unit constraint on w, but what is the actual numerical procedure?
@@ -407,7 +398,6 @@
     - build Lagrangian
     - $\mathcal{L}(\theta,\lambda)=1-\theta_1^2+\theta_2^2+\lambda (\theta_1+\theta_2)$
     - solve gradients with respect to both thetas and lambda and solve for theta
-
 - PCA solution
 
   - $\arg\max_w[\frac{1}{N}\sum_{k=1}^N(w^Tx_k)^2]$  with $\norm{w}=1$
@@ -417,16 +407,13 @@
   - we build a Lagrangian multiplier $\mathcal{L}(w,\lambda)=w^T\hat\Sigma w\cdot\lambda(1-w^2)$
   - set the gradient of the Lagrangian to 0
   - $\hat\Sigma w = \lambda w$ (the solution is the eigenvector of $\hat\Sigma$)
-
 - we can generalize this to extracting more components:
 
   - compute the first principal component
   - remove it from the data
   - resulting sequence of principal components corresponds to the eigenvectors of $\hat\Sigma$
   - so in practice, we can just compute the eigenvalues of the covariance matrix 
-
 - PCA rotates the data into the new coordinate axes ($w_1x$ and $w_2x$)
-
 - using singular value decomposition (SVD)
 
   - the general approach is computing the covariance and doing eigenvalue decomposition, but we can perform stable PCA computation by doing singular value decomposition, which is faster and more stable
@@ -437,12 +424,10 @@
   - SVD has complexity $\mathcal{O}(\min(N^2d,d^2N))$, so if $d \approx N$, the complexity is about the complexity of computing eigenvectors of $\hat\Sigma$ which is $\mathcal{O}(d^3)$
   - so SVD can be prohibitive for large datasets
   - but in practice, we only need to compute the first couple of principal components
-
 - getting only first components
 
   - this can be done using an iterative power algorithm (this always converges and is very fast) to find the leading eigenvector
   - then we can use this method iteratively: project the first component out, find the next leading one
-
 - applications
 
   - can be used to visualize how examples of different classes are related
@@ -450,13 +435,79 @@
   - data compression - how many components do we actually need to represent something (e.g. faces)?
   - denoising - we can use PCA to remove uninformative noise
   - artifact removal - e.g. in EEG recordings
-
 - the main assumption of PCA is that the data is drawn from a Gaussian
 
   - there have been methods that have been developed to extend PCA, e.g. kernel PCA (in feature space), CCA (maximize correlation and not variance)
 
-    
 
-   
+### Lecture 4: Fisher's discriminant analysis
+
+- classification involves labels of the data and learning how they relate to the data
+- NCC (nearest centroid classifier) and LDA (linear discriminant analysis) find linear separation between classes
+  - for NCC, $w = \mu_1-\mu_2$
+  - for LDA, $\Sigma^{-1}(\mu_1-\mu_2)$ - corrects for the shear in the data (e.g. covariance)
+- NCC: assume you only know the means of the two distributions, the method linearly separates the classes based on the distance to the means
+  - formalized by $w = \frac{\mu_2-\mu_1}{|\mu_2-\mu_1|}$
+  - b is the offset - $w^T\frac{\mu_1+\mu_2}{2}$
+  - line is $w^Tz-b=0$
+- example: abstract ideas and prototypes
+  - primary cortex neurons react to primitive features (edges etc), but other cells react to more abstract stimuli
+  - psychological theory - learning prototypes (toy example: triangles vs circles)
+    - prototypes can be the class means
+    - we can calculate the distances from the new data to the class means and check what class is new data more similar to
+- Rosenblatt and perceptron (ANN for pattern recognition)
+  - $w^Tx$ - summing up of weights (strengths of the connections) for units
+  - each neuron has a threshold for firing ($\beta$)
+  - goal: binary classification of multivariate data
+  - input: learning rate n and N tuples of x and y (data and label, respectively)
+  - output: weight vector w such that $w^Tx\geq0$ for one label and $<0$ for the other label
+  - we can incorporate an error function $E(w)=-\sum_{m}w^Tx_my_m$
+    - the error becomes positive for wrong classifications
+    - this error can be minimized iteratively (e.g. using stochastic gradient descent)
+      - procedure: randomly initialize w, pick a random misclassified data point, descent in the direction of the gradient at a single data point
+      - if there is a solution, the perceptron algorithm will find it in a finite number of steps
+      - it will converge quickly if the data has a large margin between classes
+- sometimes the data is non-separable linearly, in this case, you might need two hyperplanes or non-linear separations (e.g. an ellipse)
+- the perceptron is also bad at things like XOR
+  - layering perceptrons => neural network (or deep neural network)
+- the data might also be correlated, which means that the distance between the centers is not a good metric
+  - in this case, multiplying with an inverse of the covariance matrix is a solution to account for it (e.g. invert this correlation)
+- correlation coefficient between x and y $Corr(x,y)=\sum_t\frac{x_ty_t}{\sqrt{x_t^2y_t^2}}$
+  - normalized scalar product (assuming centered data)
+  - but: there can also be correlated measurement noise that will introduce correlations that do not exist in the original data
+- in terms of classification, SNR can be defined by the separation between the distributions (both means and variance)
+  - this is also called the t-value
+- covariance matrix = $1/N\cdot XX^T$ (assume centered data)
+  - generating correlated data involves a diagnonal scaling matrix D and a rotation R (only scaling does not induce a correlation because the spread will be along one dimension only)
+- Fisher - influential in statistics (extremely so)
+- classification can be viewed in terms of dimensionality reduction
+  - we can try to find a vector $w \in \R^d$ that maximizes mean class difference and minimizes the variance in each class (i.e. kind of rotate the space)
+  - maximizing difference: $(w^Tw_1-w^Tw_2)^2=w^T(w_1-w_2)(w_1-w_2)^Tw$ (this is the **between class scatter matrix ($S_b$)** that shows the distance between the means of classes)
+  - minimizing variance: $1/N_1 \sum_{n=1}^N (w^T(x_i1-w_0))^2$ **within class scatter matrix ($S_w$)**
+  - Fisher criterion: $\arg\max_w \frac{w^TS_Bw}{w^TS_Ww}$
+    - to optimize it, we set its derivative with respect to w to 0
+    - if we rearrange stuff, $S_Ww=S_Bw\frac{w^TS_ww}{w^TS_Bw}$
+    - since the fraction is a scalar, this is reminiscent of an eigenvalue problem $S_Ww=S_Bw\lambda$
+    - we find that w is proportional to $S_w^{-1}(w_1-w_2)$ 
+- if both classes have the same covariance matrix, LDA decorrelates the data followed by nearest centroid classification
+- example: P300 BCI speller
+  - calibrate on continuous data, extract features, train classifier 
+  - then we can apply this classifier to estimate the classes of test data
+  - ERPs are elicited by specific signals
+  - centroid classification fails because there is a lot of overlap (covariance) in the signal
+- problems with Fisher's LDA
+  - not robust to outliers
+  - often probabilistic outputs are desirable
+- logistic regression
+  - given data x and labels y, we can establish the probability of an example $x_t$ being drawn from the positive class as $p(y=+1|x_t)=g(w^Tx_t)$
+  - $g(z)=\frac{1}{1+e^{-z}}$
+  - sigmoid function
+  - e.g. put a function over the Fisher estimate $w^Tx$
+  - we can calculate the log likelihood of the data and take the derivative of it with respect to w
+  - this can also be used using stochastic gradient descent
+
+
+
+ 
 
  
