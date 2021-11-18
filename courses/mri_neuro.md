@@ -213,13 +213,9 @@
 - after the neuropores (openings in neural tube) close, the neural tube starts growing "bubbles" at around the 4th week of gestation - these are the cerebral vesicles 
 
   - cavities inside the vesicles creates the ventricles
-
 - CNS developers from caudal to cranial (e.g. from medulla/pons to cerebrum)
-
 - the telencephalon makes up about 85% of the total weight of the brain
-
 - brainstem
-
 - <img src="img/mri/brainstem.jpg" alt="gradients" style="zoom:70%;" />
 
   - elongation of the spinal cord
@@ -237,18 +233,14 @@
     - types of tasks: processing for limbs (hemispheres), balance and eye movements (flocculonodular node), trunk movement (vermis) (alcohol disproportionately produces atrophy in the vermis)
   - reticular formation: ARAS (ascending reticular activating system) - attention and alertness, also includes primitive reflexes (breathing, vomiting)
   - we can't see nuclei in MRI, but can see some nerves
-
 - mesencephalon
-
 - <img src="img/mri/mesencephalon.jpg" alt="gradients" style="zoom:40%;" />
 
   - basal ganglia
   - substantia nigra - Parkinson's disease
   - tectum - colliculi (superior and inferior), reflexes
   - tegmentum - cranial nerve nuclei, red nuclei
-
 - diencephalon
-
 - <img src="img/mri/diencephalon.jpg" alt="gradients" style="zoom:70%;" />
 
   - 3rd ventricle 
@@ -263,9 +255,7 @@
   - pituitary gland
   - subthalamus 
   - epithalamus (circadian rhythm)
-
 - telencephalon
-
 - <img src="img/mri/telencephalon.jpg" alt="gradients" style="zoom:70%;" />
 
   - frontal lobe (central sulcus)
@@ -277,9 +267,7 @@
     - wernicke's area - speech perception
     - broca's area - speech production
     - dominant hemisphere hosts speech
-
 - motor pathway:
-
 - <img src="img/mri/motor.jpg" alt="gradients" style="zoom:70%;" />
 
   - conscious movement: 
@@ -290,53 +278,92 @@
     - dorsal column / medial lemniscal
     - anterolateral system / spinothalamic tract
     - spinocerebellar tract
-
 - vision system
-
 - <img src="img/mri/visual.png" alt="gradients" style="zoom:70%;" />
 
   - overlapping visual fields from two eyes
   - some of the fibers (nasal) cross at the optic chasm 
   - projects to lateral geniculate bodies => V1
-
 - hearing
-
 - <img src="img/mri/hearing.jpg" alt="gradients" style="zoom:70%;" />
 
   - cochlear nerve => cochlear nuclei => inferior colliculi 
   - hearing is much more ipsilateral
-
 - olfaction
-
 - <img src="img/mri/olfactory.png" alt="gradients" style="zoom:70%;" />
 
   - olfactory neurons/receptors in the nose synapse in the sensory bulb => primary olfactory cortex (periform cortex)
   - synapse to the amygdala, uncus and parahippocampal gyrus
   - do not go through the thalamus
-
 - limbic system
-
 - <img src="img/mri/limbic.png" alt="gradients" style="zoom:70%;" />
 
   - cingulate sulcus, cingulate gyrus, rhinal sulcus, parahippocampal gyrus, collateral sulcus, temporal pole
   - behavior/emotions/memory
-
 - basal ganglia
-
-- <img src="img/mri/basal.jpg" alt="gradients" style="zoom:70%;" />
-
+- <img src="img/mri/basal.jpg" alt="gradients" style="zoom:50%;" />
   - also spans telencephalon and diencephalon
   - nucleus caudaus, globus pallidus, amygdala, putamen etc
   - motor programs
-
 - medical examples
 
   - damage to the ventral pons - both sensory and motor systems are affected
-  - right hand and face numbness - could be primary sensory or trigeminal+other nerves damage, but probably thalamus
-
-- treatment window 
+  - right hand and face numbness - could be primary sensory or trigeminal+other nerves damage, but probably thalamus (stroke)
+- treatment window for stroke
 
   - 4 hours (can be treated with thrombolitic drugs)
   - recanalization - taking out the clot 
 
-  
+
+## Lecture 5 - MRI in clinical neurology
+
+- radiological diagnostic tools:
+  - radiograph (X-ray) - involves ionizing radiation and has limited diagnostic quality
+  - ultrasound - uses sound waves reflected off tissues (harmless) but is very rater dependent
+  - CT - uses combinations of multiple x-rays to get slices (also heavy on radiation)
+  - MRI - uses a magnetic field to excite protons in atoms in different tissues (also gradients and radio waves)
+  - angiography - fluoroscopic (X-ray beam passage) technique
+- MRI pros and cons:
+  - high contrast between tissues and structures
+  - good resolution
+  - no ionizing radiation
+  - versatile
+  - but: long acquisition time, susceptible to motion artifacts, expensive, contraindications 
+- MRI achieves tissue differentiation by combining information from several sequences
+  - T1-W: from black to white - air/blood - collagenous tissue/water tissues - protein tissues - fatty tissue/blood products
+  - T2-W: air/blood - collagenous tissue/water tissues - fat - high free water tissue/blood products
+- MRI has various applications, e.g. static (T1, T2, FLAIR), dynamic (perfusion/cardiac imaging), functional (BOLD fMRI, DWI)
+- planning an MRI exam: clinical info (what am I looking for), which sequences do I need to do, previous images
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

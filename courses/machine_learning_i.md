@@ -506,7 +506,68 @@
   - we can calculate the log likelihood of the data and take the derivative of it with respect to w
   - this can also be used using stochastic gradient descent
 
+### Lecture 5: Model Selection
 
+- model selection can be hard
+- assume we have some labeled examples for some unknown data distribution p(x,y) - we would like to learn a model f(x) that predicts the current datapoints well (and also future data points)
+- we can have multiple models with varying degrees of accuracy
+- model complexity must not be increased beyond what is necessary
+  - in practice, this can be conceptualized as a decrease in training error (e.g. at some point, the decrease vs complexity is not a good tradeoff anymore)
+- quantifying complexity is not straightforward
+  - we could count the number of parameters
+  - Bayesian information criterion
+  - smoothness
+- counter-example: a very high frequency sine wave can fit almost any dataset, but will not generalize well
+- structural risk minimisation:
+  - structure the space of solutions into a nesting of increasingly large regions (e.g. polynomials that include each other)
+  - if two solutions fit the data, prefer the solution that also belongs to the smaller regions
+- a model with the lowest generaliztion error is preferrable
+- ![img](img/ml/modsel.png)
+- holdout selection procedure
+  - predict out of sample error by splitting the data randomly (one for training, one for testing)
+  - problem: the more data is used for training, the less is available for testing and vice versa
+- cross-validation (k-fold)
+  - split the data into k parts and use k-1 parts for training and 1 for testing
+  - then average the models
+- advantages: can be selected based on simulated future observations
+- disadvantages: this approach assums that the available data is representative of the future (not always the case), small k leads to less accurate models, but for large k, it's not computationally feasible
+- example: Pascal VOC dataset
+  - some classifiers may use completely wrong features of the data (e.g. copyright labels, captions) if the data is biased
+- machine learning models learn to approximate some truth $\theta$ using some sampled data $\mathcal{D}$
+  - the estimator is $\hat\theta$
+  - we can quantify the error using e.g. the square error: $\text{Error}(\hat\theta)=(\theta-\hat\theta)^2$
+  - statistics of the estimator:
+    - $\text{Bias}(\hat\theta)=E[\hat\theta-\theta]$ (expected deviation of the mean)
+    - $\text{Variance}(\hat\theta)=E[(\hat\theta-E(\hat\theta)^2]$ (scatter around the estimator of the mean)
+    - $\text{MSE}(\hat\theta)=E[(\hat\theta-\theta)^2]$ (prediction error)
+  - ![img](img/ml/biasvar.png)
+- $\text{MSE}(\hat\theta)=\text{Bias}(\hat\theta)^2+\text{Variance}(\hat\theta)$
+  - we can show this by rewriting and expanding
+- ![img](img/ml/biasvar2.png)
+  - bias and variance have a tradeoff
+  - the bias of the mean estimator (sum over all x times 1/N) is 0 and the variance of the mean estimator is $\sigma^2/N$
+- James-Stein estimator
+  - we can do better in terms of the geenralization and mean square error!
+  - $\hat\mu_{JS}=\hat\mu-\frac{(n-2)\sigma^2}{\hat\mu^2}\hat\mu$
+  - the bias of this changed estimator is non-zero (>0)
+  - but even though we thought that an unbiased estimator (a bias of 0) is the best, this corrected estimator provides a better estimate ($\text{MSE}(\hat\mu_{JS})<\text{MSE}(\hat\mu)$)
+  - this is due to the bias-variance trade-off: slightly biasing the estimator makes the variance go down dramatically!
+  - this is called "shrinkage"
+- estimator of functions:
+  - training data is $\mathcal{D}$: X with labels Y
+  - parameter $\theta$ is a generative function $f=f_\theta$: $Y_i=f(X_i)+\epsilon_i$ ($\epsilon_i$ is error with mean 0)
+  - learning machine approximates $\hat f=f_\theta$ such that $Y_i=\hat f(X_i)$
+  - Example: linear regression approximates $f(x)=\beta^Tx+\alpha$, $\theta = (\alpha,\beta)$
+- we can do bias-variance analysis of the function estimator, e.g.:
+  - $\text{Bias}(\hat f|X_i)=E_Y[\hat f(X_i)-f(X_i)]$ 
+  - $\text{Variance}(\hat f|X_i)=E_Y[(\hat f(X_i)-E_Y[f(X_i)])^2]$ 
+  - $\text{MSE}(\hat f|X_i)=E_Y[(\hat f(X_i)-Y_i)^2]$
+- summary:
+  - we should generally prefer simpler models 
+    - model complexity can be defined via number of parameters, but ideally with structured risk minimization or BIC 
+  - Popper's view (falsification) - we should also test models on out-of-sample data
+    - holdout and cross-validation can simulate out-of-sample behavior (but this assumes that the current dataset is representative of the true distribution)
+  - we have a trade-off between bias and variance (high bias means the model is oversimplified, high variance means bad generalization)
 
  
 
