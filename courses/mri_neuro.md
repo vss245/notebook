@@ -334,16 +334,61 @@
   - T2-W: air/blood - collagenous tissue/water tissues - fat - high free water tissue/blood products
 - MRI has various applications, e.g. static (T1, T2, FLAIR), dynamic (perfusion/cardiac imaging), functional (BOLD fMRI, DWI)
 - planning an MRI exam: clinical info (what am I looking for), which sequences do I need to do, previous images
+- important: *MRI has switched directions, e.g. right of the picture is the left hemisphere and vice versa*
 
 ## Lecture 6 - MRI in clinical neurology, Part II
 
-- 
+- approach to diagnosis in neurology
+  - localization and characterization (nature of the pathology)
+  - clinical circumstances also help with diagnosis
+- different medical imaging techniques exist:
+  - tomorgraphic: CT, MRI, PET, SPECT
+  - ephys
+  - fluoroscopy and radiohgraphy
+  - ultrasound
+- tomographic views:![planes](/Users/work/notebook/courses/img/mri/planes.gif)
+  - sagital (side view, perpendicular to face)
+  - coronal (plane of the fact)
+  - axial (looking from above/below down)
+- structure and function distinction
+  - e.g. CT is mostly concerned with structure, but can also give functional information
+  - MRI can do both
+  - PET is great at activity
+- Types of MRI:
 
+![mri](/Users/work/notebook/courses/img/mri/mri.png)
 
-
-
-
-
+- types of contrast:
+  - T1: water is dark, T2: water is light
+  - T2 is best for pathologies, since they are often associated with edemas
+  - FLAIR: T2 weighted, but flowing fluid (e.g. CSF is suppressed), so it's better at picking up pathology close to CSF spaces
+    - inversion recovery: takes longer to do
+  - T2* weighted imaging: arises from magnetic field inhomogeneities, hematomas/hemorrages become hypointense (dark)
+  - Susceptibility weighted imaging (SWI): same purpose as T2*, but more sensitive to blood products (combines magnitude and phase information)
+    - diamagnetic (has an effect in the opposite direction of the field, most body substances)
+    - paramagnetic (has an effect in the same direction as the field, deoxyhemoglobin and others)
+    - ferromagnetic (strongly magnetizable, e.g. iron etc)
+  - Proton density weighted imaging: most dense tissues are brightest
+  - Diffusion weighted imaging: uses diffusion of water molecules to generate contrast (movement of water is different in different tissues, this is particularly helpful to visualize axons)
+  - Angiography: visualizing blood vessels
+    - Time-of-flight: stationary tissue is saturated by multiple RF pulses, but flowing blood is not (so contrast is not even always necessary)
+    - phase contrast: a bipolar gradient is applied and stationary vs moving spins are affected differently
+  - contrast enhancement: usually IV, contains gadolinium (paramagnetic = shortens T1 and T2*)
+  - fat suppression: used to better see contrast enhancement and to see if something is a fatty tissue or not (fat has a very short T1 and a different resonance frequency to water)
+- clinical MRI scanners:
+  - 1.5 - 3 T (newer ones: 7 T)
+- MRI safety:
+  - no ferromagnetic metal in/on the body or in the room
+  - magnetic field and radiowaves affect electrical devices
+  - gradients lead to audible noise
+  - contrast agents can cause allergies or kidney disease with repeated use
+- use cases:
+  - vascular diseases (stroke etc)
+  - demyelination (visible with FLAIR or T1+contrast)
+  - infection
+  - degeneration (dementia, AD)
+  - neoplasms (tumors etc)
+  - metabolic/toxic diseases
 
 
 
