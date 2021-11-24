@@ -315,7 +315,7 @@
   - recanalization - taking out the clot 
 
 
-## Lecture 5 - MRI in clinical neurology
+## Lecture 5 - MRI in clinical neurology, Part I
 
 - radiological diagnostic tools:
   - radiograph (X-ray) - involves ionizing radiation and has limited diagnostic quality
@@ -335,7 +335,9 @@
 - MRI has various applications, e.g. static (T1, T2, FLAIR), dynamic (perfusion/cardiac imaging), functional (BOLD fMRI, DWI)
 - planning an MRI exam: clinical info (what am I looking for), which sequences do I need to do, previous images
 
+## Lecture 6 - MRI in clinical neurology, Part II
 
+- 
 
 
 

@@ -38,15 +38,14 @@
     - we are interested in $P(w_j|x)$ - probability of being a certain class after observing x (the use case)
 
 - **Bayes theorem: $$P(w_j|x)=\frac{p(x|w_j)\times P(w_j)}{p(x)}$$ or $$posterior=\frac{likelihood \times prior}{marginal\_likelihood}$$**
-
   - ![img](img/ml/duda1.png)
   - prior is the probability of the class before observing data, posterior of the class after observing data
-
+  
   - the left side is the distribution of measurements for each class (e.g. class $w_2$ has a spread of 9 to 14, $w_1$ has two typical sizes)
   - applying Bayes theorem yields a distribution of classes given the measurements
   - the two curves sum to 1 (an observation must belong to 1 of 2 classes)
   - **based on the posterior, we can create an optimum decision policy: $\arg \max_j P(w_j|x)$ - decide in favor of the class that is most likely**
-
+  
   - we can have alternate formulations of the decision that do not require Bayes' theorem
     - $\arg \max_j \frac{p(x|w_j)\times p(w_j)}{p(x)}$
     - $p(x)$ is positive and does not depend on j, so we can omit it
@@ -56,7 +55,7 @@
     - log of a product is the sum of logarithms
     - $\arg \max_j \log p(x|w_j)  + \log p(w_j) $
     - we need this formulation to simplify the derivations
-
+  
 -  specific case: data generated from a Gaussian distribution
 
    - ![img](img/ml/gaus.png)
@@ -161,14 +160,11 @@
 
   - we can infer posterior probabilities from it
   - if we know the data generating process $p(x|w)$ (e.g. Gaussian distribution), we can build a classifier: $\arg \max_j [p(w_j|x)] = \arg \max_j [\log p(x|w_j)+log p(w_j)]$
-
 - can we assume that we know the data densities $p(\pmb{x}|w)$? or learn from data?
-
 - idea: build a histogram in a discretized input space (e.g. count observations in each bin) and normalize it
 
   - problem: a lot of dimensions - $s^d$ (curse of dimensionality)
   - if there are finite observations, $p(x)=0$ which will break the classifier
-
 - model-based approach:
 
   - assume a parametric form for $p(x|w)$, e.g. $\mathcal{N}(\mu_j,\Sigma_j)$
@@ -176,23 +172,18 @@
   - an advantage: we have less values to estimate
   - a disadvantage: we assume a distribution and the assumption might be wrong
     - however, Central Limit Theorem says that a sum of non-Gaussian distributions will approach the bell curve
-
 - goal: we are given a set of density functions, e.g. Gaussian ${p(x|\theta), \theta \in \Theta}$, where theta is the parameter vector that we want to find 
-
 - assume a dataset $D=(x_1...x_N)$
-
 - assume that each example is generated independently and drawn from the same dataset $p(x|\theta)$ - in this case, the entire probability of the dataset given the parameters will be: $$p(D|\theta)=\prod_{k=1}^N p(x_k|\theta)$$
 
   - this is the likelihood of parameters theta with respect to dataset D, e.g. $p(D|\theta)=L(\theta|D)$
-
 - **best parameters are given by $\hat\theta=\arg\max_\theta p(D|\theta)$ - maximizing the likelihood **
-
 - example:
 
   - assume data density is Gaussian and we can get the joint density via a product (independence assumption)
   - how to find $\theta$ to maximize likelihood $p(D|\theta)$?
   - calculus recap:
-    - if we have a function $f(x)$ and we would like to find $\arg\max f(x)$, we don't have to look at all the values - we can require the function to be concave (pointing up) and continuously differentiable
+    - if we have a function $f(x)$ and we would like to find $\arg \max f(x)$, we don't have to look at all the values - we can require the function to be concave (pointing up) and continuously differentiable
     - then the maximum will be where the gradient (vector derivative) is 0:
       $$\nabla_\theta f(\theta) = [\partial f/\partial \theta_1 .... \partial f/\partial \theta_h] = 0$$
    - if we look at the Gaussian distribution, it is not concave - but we can transform it to be by applying a logarithm (log of products becomes a sum of the logs and the exponential disappears) - *log likelihood*
@@ -209,7 +200,6 @@
           $$\sum_{k=1}^N x_k = N\cdot\theta$$ since theta doesn't depend on k
           $$\hat\theta=\frac{1}{N}\sum_{k=1}^Nx_k$$
       -  **optimal parameter is the one where the mean corresponds to the empirical mean of the data ($\theta=\bar x$)** 
-
  -  generalize to the multivariate case:
 
     -  multivariate Gaussian: $$\log p(D|\theta) = \sum_{k=1}^N -0.5 \log[(2\pi)^d det(\Sigma)]-0.5(x_k-\mu)^T\Sigma^{-1}(x_k-\mu)$$
@@ -229,7 +219,6 @@
           $$\frac{1}{N}\cdot \sum_{k=1}^N I x_k=I\mu$$
           $$\frac{1}{N}\cdot \sum_{k=1}^N x_k=\mu$$
           same result as before: optimal (maximum likelihood) parameter for mu is the empirical mean of the data
-
 - **building a classifier with ML**
 
   - we don't have the knowledge of the full data generating process
@@ -254,7 +243,6 @@
     - $3\theta_2=4(1-\theta_2)$
     - $3\theta_2=4-4\theta_2$
     - $\theta_2=4/7\approx0.57$
-
 - we can apply Bayesian decision theory: in BDT, we predict the class using $\arg \max_j p(w_j|x)$ or $\arg \max_j p(x|w_j)\cdotp(w_j)$ (p(x) doesn't depend on j and doesn't affect the argmax)
 
   - for $w_1$, we have $p(x|w_1)\cdotp(w_1)$
@@ -265,7 +253,6 @@
   - $= 0.125$
   - same calculation for $w_1$: $(1-\theta_2)\theta_2\cdot p(w_2)=(1-0.57)\cdot0.57\cdot0.5=0.123$
   - the likelihood is higher for $w_1$
-
 - **Bayesian approach to estimating parameters:**
 
   - instead of maximizing the likelihood like before ($\hat\theta=\arg\max_j p(D|\theta))$, we can build a distribution over this parameter
@@ -274,7 +261,6 @@
   - how to make a classifier out of it?
   - In maximum likelihood classification, we try to find $p(w_j|x)=\frac{p(x|w_j,\hat\theta_j)p(w_j)}{\sum_jp(x|w_j,\hat\theta_j)p(w_j)}$ (we use our optimal theta obtained by maximizing the log likelihood of the model parameters $p(x|\theta)$ to find the *posterior*, so the likelihood of the class given data - **we have an intermediate step where we optimize the parameters**)
   - in Bayesian classifiers, we bypass the intermediate step and condition **directly on the data**: $p(w_j|x,D)=\frac{p(x|w_j,D)p(w_j)}{\sum_jp(x|w_j,D)p(w_j)}$ - we originally have $p(w_j|D)$, but we can assume that class priors are set and don't depend on the data
-
 - to connect the two approaches, we can express the term $p(x|w_j,D)$ in terms of the parameters:
 
   - $p(x|w_j,D)=\int p(x|\theta_i,w_i,D_i)p(\theta_i|w_i,D_i)d\theta_i$ , where D are the previous datapoints given
@@ -282,7 +268,6 @@
     - *we don't keep the $w_i$ dependence because it's implicit in $D_i$ and we assume that x is generated independently, so $p(x|D) = p(x)$*
   - where $p(\theta_i|D_i)=\frac{p(D_i|\theta_i)\cdot p(\theta_i)}{\int p(D_i|\theta_i)p(\theta_i)d\theta_i}$
   - pipeline: generate $p(\theta|D)$, then compute the integral to get $p(x|w,D)$ and then compute the class posterior/decision function $p(w|x,D)$
-
 - **building a classifier with Bayes**
 
   - again, we don't have the knowledge of the full data generating process
@@ -296,7 +281,6 @@
     - compared to ML, we don't get a fixed estimate but a probability distribution around 0.5
   - we can do the same computation with class 2, resulting in $280\cdot\theta_2^4\cdot(1-\theta_2)^3$
   - the shape is a narrower bell shape between 0 and 1, centered closer to 4/7
-
 - again, we can try to classify a new datapoint with this:
 
   - $x = 1$, compute $p(x|w_1,D_1)=\int_0^1p(x|\theta_1)\cdot p(\theta_1|D_1)d\theta_1=\int_0^1\theta_1^3(1-\theta_1)^3\cdot30=\frac{3}{14}=0.214$
@@ -304,12 +288,10 @@
     - $p(x|w_2,D_2)=\int_0^1p(x|\theta_2)\cdot p(\theta_2|D_2)d\theta_2=\int_0^1\theta_2^5(1-\theta_2)^4\cdot280=\frac{2}{9}=0.22$
   - to compute the decision, we calculate $\arg \max_j  p(x|w_j,D_j)\cdot p(w_j)$ (as before, argmax of the numerator of the class posterior because the denominator is constant)
     - for class 1, it's equal to $0.214*0.5$ and for class 2, $0.222*0.5$, so we decide in favor of class 2
-
 - we have contradictory results! MLE tells us to choose class 1, while Bayesian estimation tells us to estimate class 2
 
   - in Bayesian estimation, we introduce priors - Bayes classifiers are influenced by priors and less by data
   - Bayes classifiers prefer classes supported by more data
-
 - **estimating Gaussian parameters with ML and Bayesian estimation**
 
   - consider a data density $p(x|\mu)=\mathcal{N}(\mu,\sigma^2)$ with an unknown mean $\mu$ (assume fixed variance)
@@ -327,7 +309,6 @@
     - the mean estimate will be pulled towards the prior if the n is small (e.g. the fraction will move towards 1)
     - the mean estimate has a variance term $\sigma^2_n$ which can help us estimate the confidence
     - more observed data will bring the Bayes posterior model towards the ML estimator
-
 - **summary**:
 
   - we typically don't know parameters of distributions that generate the data
@@ -547,7 +528,7 @@
   - bias and variance have a tradeoff
   - the bias of the mean estimator (sum over all x times 1/N) is 0 and the variance of the mean estimator is $\sigma^2/N$
 - James-Stein estimator
-  - we can do better in terms of the geenralization and mean square error!
+  - we can do better in terms of the generalization and mean square error!
   - $\hat\mu_{JS}=\hat\mu-\frac{(n-2)\sigma^2}{\hat\mu^2}\hat\mu$
   - the bias of this changed estimator is non-zero (>0)
   - but even though we thought that an unbiased estimator (a bias of 0) is the best, this corrected estimator provides a better estimate ($\text{MSE}(\hat\mu_{JS})<\text{MSE}(\hat\mu)$)
