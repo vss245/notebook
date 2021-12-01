@@ -390,6 +390,88 @@
   - neoplasms (tumors etc)
   - metabolic/toxic diseases
 
+## Lecture 7 - MRI preprocessing
+
+- processing MRI data is not trivial
+  - decisions made while processing affect the results
+- considerations:
+  - what needs to be done - i.e. make image smoother
+  - how to do it - which parameters, methods
+  - why does this need to be done - every step has pros and cons
+  - when does the step occur - the order might affect the results too
+- tools: FSL, AFNI, FreeSurfer, ANTs
+- data format:
+  - DICOMs
+    - can be stored in large systems - PACS
+  - but most processing software uses NIfTI (or Analyze)
+  - most MRI data consists of the image data (gray values for voxels) and a header (data description)
+- intensity non-uniformity correction
+  - signal can vary smoothly across the image
+  - can be due inhomogeneous RF excitation, receiver coil sensitivity or interaction between the magnetic field and the conductive material
+  - correction can be prospective or retrospective (filtering, clustering, Fourier transform)
+- geometric distortion correction
+  - occurs due to B0 inhomogeneity at tissue interfaces
+  - especially with echoplanar imaging (fast method)
+  - can be corrected with a field map
+- signal can "drop out" due to inhomogeneities, but this cannot be corrected
+- slice timing correction
+  - compensates for differences between slice acquisition times
+- brain extraction
+  - skull stripping - removes non-brain tissue (is also necessary for steps like registration, segmentation)
+  - starts from a seed in the middle until edges occur
+- segmentation
+  - tissues
+    - can be used to separate the brain into tissues (e.g. gray matter, white matter, csf)
+    - can be done using peaks in the signal intensity graph
+  - anatomical
+    - done using standard atlases of regions
+  - caveats for segmentation:
+    - signal inhomogeneities can affect it
+    - partial volume effects
+- registration
+  - different images are in different spaces (even in the same subject!)
+  - images can be moved to match other images (alignment)
+  - considerations: how to move the image and how much
+  - used for group analysis, longitudinal analysis, using labels/atlases
+  - types of registration:
+    - same subject, same modality - linear transformations (xyz displacement, xyz rotation - 6 DOF) 
+    - this assumes that brain shape and size don't change
+    - same subject, different modality - linear transformation (displacement, rotation, affine (big/small) 12 DOF) 
+    - accounts for different sequence properties
+    - different subjects - normalization (e.g. aligning to template)
+      - non-linear (millions of DOF)
+      - cost function - how to assess similarity of images
+      - resampling - change voxel values
+- motion correction
+  - it's hard to stay still in the scanner
+  - static anatomical images - not much of an issue
+  - is an issue in functional MRI (since it has a time component)
+  - particularly an issue in ill patients, elderly, claustrophobic, children
+  - motion can be quantified in many ways, e.g. framewise displacement
+  - primary correction - alignment between slices
+  - secondary motion correction - removing the effect of motion on the signal itself - much harder!
+    - regression
+    - despiking
+    - scrubbing
+    - decomposition
+  - prospective motion correction
+    - tracking - e.g. using head markers or navigator scans (adjusts image in real time)
+    - prevention is best - explain to subjects, use padding, minimize scan times
+- spatial smoothing
+  - removes high frequency information
+  - increases SNR
+  - required for some analyses
+  - method: convolve with a Gaussian kernel (specificed FWHM/SD)
+  - balancing act: need to remove just enough noise
+- temporal filtering
+  - can be done to remove faster changes
+  - underlying signals that drive fMRI are quite slow
+- general advice
+  - avoid point-and-click pipelines
+  - draw a schematic diagram of the pipeline
+  - optimize pipeline on an independent dataset
+  - always look at images at every step, make sure expected stuff is happening
+
 
 
 

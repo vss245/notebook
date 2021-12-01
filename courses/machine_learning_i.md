@@ -678,5 +678,7 @@
 
 #### Summary
 
-- moving from separation using means/variance to margins (LDA -> perceptron) and from linear to non-linear functions
+- moving from separation using means/variance to margins between classes (LDA -> perceptron) and from linear to non-linear functions
+- the NN gradient can be computed using error backpropagation
+- the perceptron and NN do not have closed form solutions but can be trained using gradient descent
 - remaining questions: generalization, optimisation, multiclass classification
