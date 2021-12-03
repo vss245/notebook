@@ -682,3 +682,147 @@
 - the NN gradient can be computed using error backpropagation
 - the perceptron and NN do not have closed form solutions but can be trained using gradient descent
 - remaining questions: generalization, optimisation, multiclass classification
+
+## Lecture 7: Kernel methods
+
+#### Learning theory I
+
+- scenarios: regression, classification, density estimation
+- we want to learn the function f that generates the data $(x_1,y_1)...(x_n,y_n) \in \R^n\times\R^m$ or in ${\pm1}$ from some unknown probability distribution $P(x,y)$
+  - such that the expected number of errors on the test set is $R(f)=\int \frac{1}{2}|f(x)-y|^2dP(x,y)$ and is minimal (*risk minimization*)
+- big assumption is that your sample is representative and comes from the actual population distribution (e.g. if you are trying to predict the data on an unbalanced or not a representative dataset, your predictions won't be accurate)
+- problem is that P is unknown: we need an induction principle
+  - *empirical risk minimization* - we replace the average over $P(x,y)$ by an average over the training sample (minimize the training error)
+  - $R_{emp}(f)=\frac{1}{N}\sum_i^N\frac{1}{2}|f(x_i)-y_i|^2$
+  - problem: we can minimize the training error, but that does not mean that the generalization error is low -> overfitting
+
+#### Predicting R(f)
+
+- questions:
+  - how well does a model generalize?
+  - how quickly do R(f) and R_emp(f) converge?
+  - does the model converge?
+- approaches:
+  - cross validation - training and testing split - provides an estimator of the risk R(f)
+  - error bounds - bound R(f) based on model complexity
+
+#### Learning theory II
+
+- law of large numbers - as N goes to infinity, the empirical risk will converge to the true risk
+  - but does ERM lead to the same result as RM?
+- Vapnik: uniform convergence is needed (Vapnik-Chervonenkis theory - VC theory)
+  - for classification: with a probability of at least $1-\eta$,
+  - $R(f) \leq R_{emp}(f)+\sqrt{\frac{d(\log\frac{2N}{d}+1)-\log(\frac{\eta}{4})}{N}}$
+    - i.e. empirical risk + some term bounds the actual risk
+    - d - function class complexity (a.k.a. VC dimension, small for simple models)
+    - $\eta$  - probability
+    - for a good upper bound, the square root term needs to be very small
+    - *structural risk minimization* - introduce structure on a set of functions, minimize the right hand side
+
+#### Structural risk minimization
+
+![img](img/ml/srm.png)
+
+- h is the complexity of the model
+- learning f requires a small training error and a small complexity of the set $\{f_a\}$
+
+#### VC dimension
+
+- half-spaces in $\R^2$: $f(x,y)=sign(a+bx+cy)$
+  - how many points can be separated in arbitrary ways
+  - we can do this for 3 non-collinear points, but not 4
+  - so the VC dimension is 3
+  - in n dimensions, d = n+1
+
+#### Hyperplane classifiers
+
+- linear hyperplane classifier - method from perceptron times
+- ![img](img/ml/lhc.png)
+- hyperplane is $y = sign(wx +b)$ in canonical form if we remove the scaling freedom and set $\min_{x_i\in X} |(wx_i)+b|=1$
+- optimal perceptron maximizes the margin between the data classes
+  - larger margin $1/\norm{w}$ gives better generalization
+- we can apply VC theory to hyperplane classifiers
+  - in canonical form, d is upper bounded by $d \leq \min\{R^2\norm{w}^2+1,n+1\}$
+  - R is the radius of the smallest sphere containing data
+  - maximum margin will occur when $\norm{w}^2$ is smallest (-> good generalization -> low risk), so we should optimize $\min \norm{w}^2$
+  - this is independent of the space dimension!
+
+#### Feature spaces and the curse of dimensionality
+
+- support vector approach: preprocess the data
+  - $\Phi:R^N \mapsto F$
+  - $x \mapsto \Phi(x)$
+  - where $N \ll \dim(F)$
+  - basically, map to a very high dimensional space! 
+- the learning problem becomes $(\Phi(x_1),y_1)...\in F \times \R^M $ or $\{\pm1\}$
+- learn $\tilde{f}$ to construct $f = \tilde{f}\circ \Phi$
+- counterintuitive approach due to the dimensions - classical statistics do become harder
+- but SV learning might become simpler - if we choose $\Phi$ such that our new function f allows a small training error and has low complexity, then we can guarantee good generalization
+  - *the complexity matters, not the dimensionality*
+
+#### Margins and mapping
+
+- a large margin around the hyperplane means that there is fewer ways to separate points, so the VC dimension is smaller
+- the idea is to map everything into a high dimensional space where we can use a simpler approach, e.g. a large margin classifier
+- if it's optimal in a high dimensional space, it's also optimal in a low dimensional space
+- ![img](img/ml/cls.png)
+  - i.e. mapping to a high dimensional space allowed us to separate the classes with a line!
+
+#### The kernel trick
+
+- $(\Phi(x)\cdot\Phi(y))=(x_1^2,\sqrt2x_1x_2,x_2^2)(y_1^2,\sqrt2y_1y_2,y_2^2)^T$
+
+  ​	$= (x\cdot y)^2= :k(x,y)$
+
+- the scalar product in a high dimensional space can be computed in $\R^2$ - i.e. we can rewrite our high dimensional mapping as a product in 2 dimensions 
+
+- this only works for particular kernels - **Mercer kernels**
+
+#### Mercer kernel
+
+- ![img](img/ml/mercer.png)
+- common Mercer kernels:
+  - polynomial $(x\cdot y+c)^d$
+  - RBF
+  - inverse multiquadric
+- kernels correspond to regularization operators
+  - we can also express them in Fourier space, e.g. Gaussian kernel corresponds to the smoothness assumption
+
+#### Example of the kernel trick
+
+- if we have a dataset and we want to compute the squared distance to the mean in feature space, we can apply an identity and reformulate it in terms of the kernel
+- ![img](img/ml/kerex.png)
+- this means we don't have to do scalar products in the infinite dimensional space, we can just rewrite everything in terms of the original space
+
+#### Hyperplane $y = sign(w\cdot\Phi(x)+b)\in F$
+
+- we want to minimize $\norm{w}^2$ subject to $y_i \cdot sign(w\cdot\Phi(x_i)+b) \geq 1$ - i.e. that the training data is separated correctly
+- this problem lives in F, the infinite dimensional feature space
+- solving this problem by writing out a Lagrange function:
+  - $L(w,b,\alpha)=\frac{1}{2}\norm{w}^2-\sum_i^N\alpha_i(y_i((w\cdot\Phi(x_i))+b)-1)$
+  - i.e. copy the optimization function and add the constraint as the Lagrangian
+  - we take the derivatives with respect to all the parameters and set them to 0
+  - $\part L/\part b=\sum_i^N \alpha_iy_i=0$
+  - $\part L/\part w = \sum_i^N\alpha_iy_i\Phi(x_i)$
+- w is in the infinite dimensional feature space, so the w is expanded by the data $\Phi(x_i)$ but the *sum is finite* (from 1 to N)!
+- we can substitute the terms into the Lagrangian to get the dual problem
+
+#### Hyperplane in F with slack variables: SVM
+
+- we might have cases where the data is on the wrong side - outliers or noise
+- we can add a slack variable:
+  - $\min \norm{w}^2+C\sum_i^N\xi_i^p$
+  - subject to $y_i \cdot sign(w\cdot\Phi(x_i)+b) \geq 1 - \xi _i$
+
+#### Dual problem
+
+- $\max W(\alpha)=\sum_i^N\alpha_i-\frac{1}{2}\sum_{j,i=1}^N\alpha_i\alpha_jy_iy_jk(x_i,x_j)$
+- add C to the constraint 
+
+#### Summary
+
+- the feature space may be infinite, but the solution space is N-dimensional (i.e. hyperplane)
+
+- we can use the kernel trick by expanding $w = \sum_i^N \alpha_iy_i\Phi(x_i)$ where $\Phi(x_i)\Phi(x)=k(x_i,x)$ - so we never touch the infinite dimensional space
+
+  
