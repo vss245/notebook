@@ -1,4 +1,4 @@
-### Formulas and definitions
+### Formulas and definitions for ML I
 
 - The **generalized mean** takes the form $M_p = (\frac{1}{N}\sum_{i=1}^N x_i^p)^{\frac{1}{p}}$
   - min: $p = -\infty$, harmonic: $p=-1$, geometric: $p = 0$, arithmetic: $p=1$, quadratic: $p = 2$, max: $p = \infty$
@@ -23,6 +23,7 @@
   - get likelihood $p(D|\theta)$ 
   - compute $p(\theta|D)$
   - *the result is a posterior distribution* (these classifiers prefer classes with more data and rely on priors)
+  - optimal Bayes classifier perfectly separates the data if the data generating process is known
 - **PCA** is done to reduce dimensions (minimizes noise, maximizes signal)
   - we want to find a unit projection vector w such that $\arg\min_w[\frac{1}{N}\sum_{k=1}^N\norm{x_k-ww^Tx}^2]$ (minimize difference between data and projected data)
   - similarly, we can maximize the variance $\arg\max_w[\frac{1}{N}\sum_{k=1}^N(w^Tx_k-E[w^Tx])^2]$ (in centered data $E[w^Tx]=0$)
@@ -39,15 +40,32 @@
   - find a line to project the data onto that maximizes the ratio between between-classes variance and within-classes variance
   - $\arg\max_w \frac{w^TS_Bw}{w^TS_Ww}$
   - $w \propto S_w^{-1}(w_1-w_2)$
-- **Model selection**
+- **Model selection:**
   - structural risk minimization: structure the space of solutions into nested regions (like polynomials), prefer solution that belongs to a smaller region
   - BIC - penalises the number of parameters
   - $\text{Bias}(\hat\theta)=E[\hat\theta-\theta]$ (expected deviation of the mean)
   - $\text{Var}(\hat\theta)=E[(\hat\theta-E(\hat\theta)^2]$ (scatter around the estimator of the mean)
-  - $\text{MSE}(\hat\theta)=E[(\hat\theta-\theta)^2]=\text{Bias}(\hat\theta)^2+\text{Var}(\hat\theta)$ (prediction error)
+  - $\text{MSE}(\hat\theta)=E[(\theta-\hat\theta)^2]=\text{Bias}(\hat\theta)^2+\text{Var}(\hat\theta)$ (prediction error)
 - MLE has an unbiased estimator, but that's not always good
   - James-Stein estimator: $\hat\mu_{JS}=\hat\mu-\frac{(n-2)\sigma^2}{\hat\mu^2}\hat\mu$ (increases the bias, decreasing the variance)
-- High bias, low variance: small range + inaccurate
-- High bias, high variance: large range + inaccurate
-- Low bias, low variance: small range + accurate
-- Low bias, high variance: large range + accurate
+- **Bias-variance trade-off:**
+  - High bias, low variance: small range + inaccurate
+  - High bias, high variance: large range + inaccurate
+  - Low bias, low variance: small range + accurate
+  - Low bias, high variance: large range + accurate
+- **Proof of the bias-variance decomposition:**
+  - $E[(\theta-\hat\theta)^2]=E[(\theta-E[\hat\theta])-(\hat\theta-E[\hat\theta])^2]=$
+  - $=E[(E[\hat\theta]-\theta)^2]+E[(\hat\theta-E[\hat\theta])^2]-2E[(\theta-E[\hat\theta])(\hat\theta-E[\hat\theta])]$
+  - $=(E[\hat\theta]-\theta)^2+E[(\hat\theta-E[\hat\theta])^2]=\text{Bias}^2(\hat\theta)+\text{Var}(\theta)$
+- **Perceptron:**
+  - perfectly separates the data if it's lineartly separable
+  - model: $z_k=w^Tx_k+b$ , where $y_k=\text{sign}(z_k)$
+    - gradient descent: $w \leftarrow w+\eta\cdot x_kt_k$ and $b \leftarrow b+\eta\cdot t_k$ ($\eta$ is the learning rate)
+    - this algorithm uses $\mathcal{E}(w,b)=\frac{1}{N}\sum_{k=1}^N \max(0,-z_kt_k)$ (error function)
+    - $\frac{\part\mathcal{E}}{\part w}$ is showing the direction of the correct classification weights
+  - con: converges, but can stop too early for generalization
+- **Artificial neuron:**
+  - ![img](img/ml/aneuron.png)
+  - here, z is the input to the activation function $a_j = g(z_j)$ (g can be tanh, sigmoid, step etc)
+  - error is back-propagated via the chain rule
+- **Kernel methods:**

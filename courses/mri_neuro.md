@@ -472,7 +472,26 @@
   - optimize pipeline on an independent dataset
   - always look at images at every step, make sure expected stuff is happening
 
+## Lecture 8 - Structural MRI analysis
 
+- clinics have different types of MRIs (e.g. 1.5-3 T, different sequences, voxel sizes etc)
+- MRI weighting:
+  - T1 - regrowth of the longitudinal magnetization towards the maximum value (short T1 - large magnetization - brighter spot)
+  - T2 - MR signal decay in the transverse plane (short T2 - quick decay - darker)
+- T1- and T2-weighted imaging is used for morphology, spinal cord atrophy, lesions
+  - T2-weighted (fluid attenuated)
+    - CSF signal is attenuated
+    - lesions have a longer T2 (bright)
+  - T1-weighted
+    - elucidates structure
+    - lesions are dark 
+- lesions should be filled prior to segmentation
+- T1/T2 can be used for mapping gyri or cortical myelin mapping (T1w MPRAGE and T2w SPACE) 
+  - uses two forms of myelin contrast to attenuate intensity bias
+- DWI is modulated by gradient strength, diffusion time, gradient orientation
+- DTI assumptions - direction of maximum diffusivity is an estimate of the major fibre orientation
+- DWI uses ball-and-stick or multi shell models of the anatomy 
+- probabilistic tractography - uses a path probability map to make a path from one region to a seed
 
 
 

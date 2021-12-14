@@ -663,17 +663,13 @@
 #### Training a neural network
 
 - we use the same error function as the perceptron, replacing $z$ with $z_{out}$: $\mathcal{E}(\theta)=\frac{1}{N}\sum_{k=1}^N \max(0,-z_{out}^{(k)}t^{(k)})=\frac{1}{N}\sum_{k=1}^N \mathcal{E}^{(k)}(\theta)$
-
 - the gradient can be expressed in terms of gradients in the higher layers using the chain rule:
 
   - $\frac{\part\mathcal{E}}{\part z_i}=\sum_j\frac{\part z_j}{\part z_i}\frac{\part\mathcal{E}}{\part z_j}$ (error back propagation)
   - this is the gradient from the resulting error to the initial activation function
   - we can also extract the parameters in a similar way: $\frac{\part\mathcal{E}}{\part w_{ij}}=\sum_j\frac{\part z_j}{\part w_{ij}}\frac{\part\mathcal{E}}{\part z_j}$
   - $z_j=\sum_i g(z_i)w_{ij}$
-  - ![](img/ml/calc.png)
-
   - now there's no need to implement this manually - automatic differentiation
-
 - simple decision functions will stop when they match the data - it can be helpful to compute further for better generalization
 
 #### Summary
@@ -738,6 +734,7 @@
 
 - linear hyperplane classifier - method from perceptron times
 - ![img](img/ml/lhc.png)
+- distance is over the square of w (norm w), so we minimize it to maximize distance
 - hyperplane is $y = sign(wx +b)$ in canonical form if we remove the scaling freedom and set $\min_{x_i\in X} |(wx_i)+b|=1$
 - optimal perceptron maximizes the margin between the data classes
   - larger margin $1/\norm{w}$ gives better generalization
@@ -822,7 +819,140 @@
 #### Summary
 
 - the feature space may be infinite, but the solution space is N-dimensional (i.e. hyperplane)
-
 - we can use the kernel trick by expanding $w = \sum_i^N \alpha_iy_i\Phi(x_i)$ where $\Phi(x_i)\Phi(x)=k(x_i,x)$ - so we never touch the infinite dimensional space
 
-  
+## Lecture 8: Support Vector Machines
+
+#### Recap
+
+- VC dimension tells us about the complexity of the function class
+- the SRM bound tells us how to balance precision of fit vs complexity of the model
+- for a given empirical risk, the less complex our function class is, the better (more data also improves the fit)
+- support vector approach - map the data into a high-dimensional feature space, use a very simple function class in this space (i.e. map into a space where the data is linearly separable) 
+  - this works because the complexity matters, not the dimensionality of the space
+  - only works for Mercer kernels
+- sometimes the data may not be separated correctly even in infinite dimensions so we need to introduce slack variables 
+  - $\min \norm{w}^2 + C\sum_i \xi_i^p$ - this is the primal problem
+  - the primal problem is subject to $y_i [w\cdot \Phi(x_i)+b]\geq 1 - \xi_i$ and $\xi_i\geq0$ 
+  - $\xi$ is the distance from the hyperplane to the point 
+  - we put the constraints and the primal problem into a Lagrangian, then we get the dual problem
+  - $L(w,b,\alpha)=\frac{1}{2}\norm{w}^2-\sum_i\alpha_i(y_i\cdot((w\cdot\Phi(x_i))+b)-1)$
+  - set derivatives of the Lagrangian with respect to b and w to 0
+  - if $y_i\cdot w...$ is = 1, then the sum = 0 and is irrelevant
+
+#### Dual problem
+
+- $\max W(\alpha)=\sum_i \alpha_i -\frac{1}{2}\sum_{i,j}\alpha_i\alpha_jy_iy_jk(x_i,x_j)$
+  - subject to $C\geq\alpha_i\geq0$, $i = 1..N$ and $\sum_i\alpha_iy_i=0$
+- if points are outside the margin, they are irrelevant - only points on (or in the margin in the slack case) are the support vectors
+  - so only a few points are needed to parametrize the hyperplane
+- remark: kernels need to be positive (Mercer's condition) - empirical check - positive eigenvalues
+
+#### SVMs in a nutshell
+
+- we have an input space with a non-liner classification boundary
+- kernel K maps it into a feature space and separates it with a large margin
+- mapping back into the input space automatically transforms the solution
+- ![img](img/ml/svms.png)
+
+#### Kernels
+
+- you need to choose the kernels based on what you know about the learning problem (reflects prior)
+- also needs to fit Mercer's condition
+- careful model selection is needed to find the appropriate kernel parameters (e.g. bandwidth of a Gaussian kernel or polynomial degree)
+- kernels allow us to implicitly work in high-dimensional spaces
+- kernels can also be applied to other domains or algorithms (e.g. PCA)
+
+#### Implementation issues
+
+- we can reformulate the problem a bit - put alpha and y in vectors, then H is a matrix with $H_{ij}=y_iy_jk(x_i,x_j)$  and then we have a vector of 1s with a length of N
+- the problem becomes $\max_\alpha 1^T\alpha-\frac{1}{2}\alpha^TH\alpha$ subject to $y^T\alpha=0$, $\alpha-C1\leq0$ and $\alpha\geq0$
+- we can also partition H into a matrix and iterate over it
+
+#### One-class classification
+
+- anomaly detection
+- translates to fitting a hypersphere around the data
+- $\max W(\alpha)=\sum_i \alpha_ik(x_i,x_i) -\frac{1}{2}\sum_{i,j}\alpha_i\alpha_jk(x_i,x_j)$
+  - subject to $C\geq\alpha_i\geq0$, $i = 1..N$ and $\sum_i\alpha_i=1$
+  - same as above, but without y since this isn't a classification problem
+
+#### SVMs for regression
+
+- SVMs can also be used for regression
+- e.g. fitting the line and margin around the data instead
+
+#### Kernelizing PCA
+
+- any linear scalar product algorithm can be kernelized
+- the data is mapped into a feature space and linear PCA is done in a feature space
+- for $x_1...x_N$, $\Phi:\R^D\rightarrow F$ where $C = \frac{1}{N}\sum_j\Phi(x_j)\Phi(x_j)^T$ (covariance matrix)
+- $\lambda V=CV$ (eigenvalue problem)
+- $CV = \frac{1}{N}\sum_j(\Phi(x_j)\cdot V)\Phi(x_j)$
+- V (eigenvalues) are in the span of the feature space, so $V = \sum_i \alpha_i \Phi(x_i)$
+- eigenvalues of the covariance matrix in feature space need to be in the span of the data (so we need to rewrite it)
+- $N\lambda(\Phi(x_k)\cdot V)=\Phi(x_k)\cdot CV$
+- define $K_{ij}=\Phi(x_i)\cdot\Phi(x_j)=k(x_i,x_j)$
+- => $N\lambda K\alpha=K^2\alpha$
+- => $N\lambda\alpha=K\alpha$
+- => eigenvalue problem as well
+
+#### Centering in feature space
+
+- centering is hard for high dimensions
+- $\tilde\Phi(x_i):=\Phi(x_i)-\frac{1}{N}\sum_i\Phi(x_i)$
+- we can rewrite the kernel in a way that reflects centering the data
+- $\tilde K_{ij}=K-1_NK-K1_N+1_NK1_N$
+- we can compute $\tilde K$ And solve the eigenvalue problem
+
+#### SVM primal 
+
+- we can maximize the margin between the data points by solving
+- $\min_{w,b} \frac{1}{2}\norm{w}^2$ - since the distance between the margins is $2/\norm{w}$
+- this is subject to the constraint $y_i\cdot(w^T\phi(x_i)+b)\geq1$
+- decision function $f(x)=sign(w^T\phi(x)+b)$
+
+#### Slater's condition
+
+- for Lagrangians, we have equality constraints - i.e. $g(x)=0$
+- here, we have an inequality constraint
+- consider the problem $\min_\theta f(\theta)$ subject to $g_i(\theta)\leq0$
+- then for *strict* inequalities the solution is given by the Lagrange dual formulation $\max_\alpha \min_\theta f(\theta)+\sum_i\alpha_ig_i(\theta)$
+- if the constraint is not satisfied this will go to infinity
+- for SVMs, the condition is $y_i\cdot(w^T\phi(x_i)+b)>1$
+- and we can inject this constraint into the equation:
+- $\max_\alpha \min_{w,b} \frac{1}{2}\norm{w}^2+\sum_i\alpha_i(1-y_i(w^T\phi(x_i)+b))$
+- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
