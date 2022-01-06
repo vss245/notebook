@@ -922,15 +922,228 @@
 - for SVMs, the condition is $y_i\cdot(w^T\phi(x_i)+b)>1$
 - and we can inject this constraint into the equation:
 - $\max_\alpha \min_{w,b} \frac{1}{2}\norm{w}^2+\sum_i\alpha_i(1-y_i(w^T\phi(x_i)+b))$
-- 
 
+## Lecture 9: Regression
 
+- regression vs classification - in classification, we are learning a decision function that maps the input to +1 or -1, in regression we map an input to a real value
 
+#### Applications of regression
 
+- example: modeling physical systems (molecular dynamics/chemical reactions)
+- energy forecasting, demand forecasting
 
+#### Optimal classifier recap
 
+- we assume that we generate data using a multivariate Gaussian and class priors
+- we can use the Bayes optimal classifier 
+  - $\arg\max_j{P(w_j|x)}=\arg\max_jx^T\Sigma^{-1}\mu^T_j-\frac{1}{2}\mu_j\Sigma^{-1}\mu_j+\log P(w_j)$
+  - this is a linear classifier
+- for an optimal regressor, we also need to make some data-generating assumptions
+  - assume a joint Gaussian $P(x,t)=\mathcal{N}((\mu_x,\mu_t),(\Sigma_{xx},\Sigma_{xt},\Sigma_{tx},\Sigma_{tt})$
+  - a Gaussian distribution can be marginalized (ignoring t, what is x) or conditioned (t = 1, what is x)
+  - conditional expectation: $E[t|x]=\Sigma_{tx}\Sigma^{-1}_{xx}x+\Sigma_{tx}\Sigma^{-1}_{xx}\mu_x$
 
+#### Objective based learning
 
+- in real world applications, data-generating distributions are not known
+- for practical purposes, we can consider a simple class such as a liner model and find the model in that class that minimizes the empirical error in a given dataset
+- $\theta^*=\arg\min_{\theta\in\Theta} R_{emp}(\theta,D)$
+- the perceptron is an example of such an approach
+  - perfectly separates training data if it's linearly separable
+  - it can be seen as a gradient descent of the error function $E(w,b)=\frac{1}{N}\sum_k \max(0,-y_kt_k)$
+  - the max argument is called the hinge loss
+  - if y and t have the same sign, 0 is the max so the error is 0
+
+#### Hinge loss vs square loss
+
+- hinge loss is designed for the decision boundary, so you need a different function for regression
+- the square loss is a popular way of measuring the error 
+- $E(w,b)=\frac{1}{N}\sum_k(y_k-t_k)^2$
+
+#### Least square regression
+
+- simplify the formula $x^Tw+b$ by adding a constant dimension $[x,1]^T [w,b]$ and incorporate b into w
+- the error function becomes $E(w)=\frac{1}{N}\sum_k(w^Tx_k-t_k)$
+- $E(w)=\frac{1}{N}\sum_k w^Tx_kx_k^Tw-2w^Tx_kt_k + cst$
+- $=\frac{1}{N}w^TXX^Tw-\frac{2}{N}w^TXt+cst$
+- we need to verify whether E is convex - XX^T is positive semidefinite, so it is
+- $\nabla E(w)=\nabla(\frac{1}{N}w^TXX^Tw-\frac{2}{N}w^TXt+cst)$
+- $=\frac{2}{N}XX^Tw-\frac{2}{N}Xt=0$
+- closed form solution $w = (XX^T)^{-1}Xt$
+
+#### Questions in model selection
+
+- are variations in training data signal or noise? 
+- how well will the model generalise?
+- can we constrain the model?
+
+#### Structural Risk Minimization
+
+- approach to measure complexity - we structure the space of solutions into increasingly large nested regions
+
+#### Ridge regression
+
+- implement the SRM principle by minimizing the error $\min_w E(w)$ subject to $\norm{w}^w\leq C$
+- we can minimize this using Lagrange multipliers
+- $\nabla_w \mathcal{L}(w,\lambda)=\nabla_w (\frac{1}{N}w^TXX^Tw - \frac{2}{N}wXt+\lambda(\norm{w}^2-C))=0$
+- $w = (XX^T + N\lambda I)^{-1}Xt$
+- where lambda is chosen to minimize the error
+- this is called ridge regression
+- in practice, we don't specify C but treat lambda as the hyperparameter
+- the higher the value of lambda, the flatter the predicted function
+
+#### From linear to non-linear regression
+
+- idea - if the function to predict is non-linear, we can non-linearly transform the input data via some feature map $\Phi: R^d\rightarrow R^h$, then solve the problem linearly in the feature space
+
+#### Kernel ridge regression
+
+- we can re-define the prediction function $y = w^T\Phi(x)$ where $w \in R^h$ and minimize $E(w)=\frac{1}{N}\sum_k(w^T\Phi(x_k)-t_k)^2$ subject to $\norm{w}^2\leq C$
+- $w = (\Phi(X)\Phi(X)^T + \lambda I)^{-1}\Phi(X)t$
+- new data points are predicted as $y = w^T\Phi(x)=\Phi(x)^Tw$ (with w as above)
+- derivation:
+  - $y = \Phi(x)^T(\Phi(X)\Phi(X)^T + \lambda I)^{-1}\Phi(X)t$
+  - $= \Phi(x)^T(\Phi(X)\Phi(X)^T + \lambda I)^{-1}\Phi(X) (K+\lambda I)(K+\lambda I)^{-1}t$
+  - the kernel matrix is equal to $\Phi(X)^T\Phi(X)$
+  - $= \Phi(x)^T(\Phi(X)\Phi(X)^T + \lambda I)^{-1}\Phi(X) (\Phi(X)^T\Phi(X)+\lambda I)(\Phi(X)^T\Phi(X)+\lambda I)^{-1}t$
+  - $= \Phi(x)^T(\Phi(X)\Phi(X)^T + \lambda I)^{-1}(\Phi(X)\Phi(X)^T\Phi(X)+\lambda I\Phi(X))(K+\lambda I)^{-1}t$
+  - $= \Phi(x)^T(\Phi(X)\Phi(X)^T + \lambda I)^{-1}(\Phi(X)^T\Phi(X)+\lambda I)\Phi(X)(K+\lambda I)^{-1}t$
+  - $= \Phi(x)^T\Phi(X)(K+\lambda I)^{-1}t$
+  - $= k(x,X)(K+\lambda I)^{-1}t$
+- predictions of the kernel ridge regression model can be rewritten as a weighted sum of kernel basis functions $y(x)=\sum_ik(x,x_i)\alpha_i$ where alpha is $(K+\lambda I)^{-1}t$
+- the choice of the kernel function will influence the prediction
+- each available data point will have a $k(x,x_i)\alpha_i$ where alpha is the datapoint multiplied by the kernel and regularized
+
+#### Gaussian process regression
+
+- regression outputs are being drawn from some joint distribution $p(y_1,y_2,...y_N)$
+- $\mathcal{N}(0,\Sigma)$ - the covariance is determined by the similarity between adjacent datapoints
+- $\Sigma_{ij}=k(x_i,x_j)+\sigma^t\delta_{ij}$
+- this regression is called Gaussian because the distribution of data points is Gaussian, but we can use any kernel (polynomial, Laplacian etc)
+- p(y) can be interpreted as the prior distribution on predictions
+- we will distinguish observed and unobserved data
+  -  we say that they belong to the same Gaussian process
+  - ![img](/Users/work/notebook/courses/img/ml/gp.png)
+
+- any conditional of a Gaussian distribution is also Gaussian, so we can find these parameters in closed form
+- we can find the expectation for future observations at input locations (and the confidence about these predictions)
+
+#### Predictive uncertainty
+
+- kernel logistic regression - we can map each point to a class probability
+- Gaussian processes enhance kernel regression with an estimate of variance
+
+#### Robust regression
+
+- square loss is not robust to possible outliers 
+- alternatives - absolute loss (error will grow linearly instead), epsilon-insensitive loss (grows slower), Huber loss 
+
+## Lecture 10: Boosting
+
+#### Recap
+
+- three scenarios: regression, classification and density estimation
+- we learn f from examples $(x_1,y_1)...(x_N,y_N)\in R^N\times R^M$ or $\{\pm 1\}$
+  - such that the expected number of errors on the test set  $R[f]=\int\frac{1}{2}|f(x)-y|^2dP(x,y)$ is minimal (risk minimization)
+  - but P (the underlying probability distribution) is unknown - we need an induction principle
+  - empirical risk minimization - replace the average over $P(x,y)$ with an average over the training sample $R_{emp}[f]=\frac{1}{N}\sum_i\frac{1}{2}|f(x_i)-y_i|^2$ - minimize the training error
+- by the law of large numbers $R_{emp}[f]\rightarrow R[f]$ as N goes to infinity
+  - but ERM doesn't lead to the same result as RM, because we need uniform convergence for that
+  - VC theory - $R[f] \leq R_{emp}[f]+VC$
+  - Structural risk minimization: introduce structure on set of functions and minimize the right hand side to minimize risk
+  - d in the formula is the VC dimension which measures the complexity of the function class
+
+#### SVM vs boosting
+
+- SVM - $R[f] \leq R_{emp}[f]+\mathcal{O}(\sqrt{\frac{\log(N\theta^2)}{\theta^2N}+\frac{\log(1/\eta)}{N}})$
+- Boosting - $R[f] \leq R_{emp}[f]+\mathcal{O}(\sqrt{\frac{d\log^2(N/d)}{\theta^2N}+\frac{\log(1/\delta)}{N}})$
+- independent of the dimensionality of the space
+
+#### Basic idea of boosting
+
+- ensemble learning - using multiple learning algorithms
+- an ensemble for binary classification will consist of T hypotheses (basis functions $h(x)$ from a function class) and T weights (each $\alpha \geq 0$)
+- the classification output is the weighted majority of the votes $f_{ens}(x)=\sum_t \alpha_t h_t(x)$
+- how to find the hypotheses and their weights?
+  - **bagging**: $\alpha_t=1/T$
+  - **AdaBoost**: reweighing some hypotheses 
+
+#### AdaBoost
+
+- input: N examples
+- initialize $d_i^{(1)}=1/N$ for $i = 1...N$
+- do for $t = 1...T$:
+  - train base learner according to example distribution and obtain hypothesis $h_t:x \to \pm 1 $
+  - compute weighted error $\epsilon_t = \sum_i d_i^{(t)}I(y\not=h_t(x_i))$ (where I is the indicator function that counts wrong examples - sum up the error)
+  - compute hypothesis weight according to how many errors there are $\alpha_t = \frac{1}{2} \log \frac{1-\epsilon_t}{\epsilon_t}$
+  - update example distribution $d_i^{(t+1)}=d_i^{(t)}\exp(-\alpha_ty_ih_t(x_i))/Z_t$
+- output: final hypothesis $f_{ens}(x)=\sum_t \alpha_th_t(x)$
+- ![img](img/ml/adab.png)
+  - the size of the datapoints indicates their weight
+  - green is the overall function
+  - similarity to SVMs - support vectors are the "hard to learn" datapoints
+- boosted LeNet performed really well on handwritten digit recognition
+
+#### Error function of AdaBoost
+
+-  AdaBoost stepwise minimizes a function of $y_1f_\alpha(x_i)=y_i\sum_t\alpha_th_t(x_i)$
+  - $\mathcal{G}(\alpha)=\sum_i \exp(-y_if_\alpha(x_i))$
+  - the gradient of $\mathcal{G}$ gives the example weights used for AdaBoost ($d_i^{(t+1)}$)
+  - the hypothesis weight is chosen such that $\mathcal{G}$ is minimized
+
+#### PAC boosting
+
+- theorem 1: suppose AdaBoost generates hypotheses with weighted training errors, then we have $\sum_i I(y_i\not=sign(f_{ens}(x_i)))\leq 2^T\prod_t\sqrt{\epsilon_t(1-\epsilon_t)}$
+- if $\epsilon_t< 0.5-0.5\gamma$ then the training error will decrease exponentially fast after only $\mathcal{O}(log(N))$ - so the algorithm needs to be smarter than chance by $\gamma$
+- in terms of VC theory: assume that d is the VC dimension of the hypothesis class = $\mathcal{O}(d\log(N)\log^2(N))$
+  - so the complexity should go up linearly with the number of iterations, but doesn't - why? fast convergence
+-  small VC (each learner is very simple) implies small deviation from the empirical risk
+
+#### Training error
+
+- the test error does not increase even after 1000 iterations and continues to drop even if the training error is 0 
+
+#### Margin distributions
+
+- we find a hyperplane in the feature space spanned by the hypotheses set
+- a margin $\rho$ for an example is $y_if_{ens}$
+- the margin for the ensemble function is the smallest example margin
+- AB tends to increase small margins and decrease large margins
+- ![img](img/ml/adab2.png)
+- ![img](img/ml/adab3.png)
+- ^ coming back to above, we can see the similarities between the SVM and AdaBoost if they are formulated in terms of margins
+
+#### In the long run
+
+- $d_i^{(t+1)}$ is ~ a softmax function with a parameter $\norm{\alpha^{(t)}}_1$
+- the norm of alpha will increase monotonically
+- the d's concentrate on a few difficult patterns (support patterns)
+- $\mathcal{G}(\alpha)=\sum\exp(-\rho_i(\alpha))^{\norm{\alpha}_1}$
+
+#### Boosting as a mathematical program
+
+- we can reformulate the SVMs' minimization of $\norm{w}^2$ as a maximization of the margin $\rho$ (normalising the $\norm{w}^2=1$)
+- in boosting, we maximize the smallest margin $\rho_i$
+
+#### Soft margins
+
+- hard margin classification can be swayed by outliers easily
+
+- same with mislabelled data
+
+- we can define a margin to be soft: $\tilde{\rho}_n(\alpha)=\rho_n(\alpha)+\xi_n$
+
+  - the xi defines the distance from the "bad" points
+
+- once we define the uncertainty measure, we get a regularized boosting algorithm
+
+  - then we can improve the error function by plugging in the soft margin
+
+- how do we know which patterns are unreliable?
+
+  - AdaBoost focuses on hard-to-learn patterns, so we can define the influence of a pattern
+
+    
 
 
 

@@ -493,7 +493,64 @@
 - DWI uses ball-and-stick or multi shell models of the anatomy 
 - probabilistic tractography - uses a path probability map to make a path from one region to a seed
 
+## Lecture 9 - Perfusion MRI
 
+- DWI reflects abnormal diffusion of water molecules caused by the failure of the Na-ATP pump 
+
+  - it's sensitive to ischemia
+
+- easy to interpret and better than CT (CT doesn't reflect early ischemic changes)
+
+- perfusion weighted imaging uses IV gadolinium to induce a strong local magnetic field gradient
+
+  - the contrast enters the tissue and slowly diffuses
+  - these images are post-processed for use
+  - the parameters are tmax (time to reach max concentration), cbf (cerebral blood flow), cbv (blood volume), mtt (mean transit time)
+
+- the idea
+
+  - DWI shows the area of irreversibly injured tissue (cytotoxic edema)
+  - PWI shows the area of overall reduced cerebral perfusion
+  - the mismatch between DWI and PWI represents the tissue at risk (ischemic penumbra)
+
+- but this didn't quite work - perfusion is very noisy and loaded with artefacts
+
+  - even the same map with different software can show very different results
+
+- why didn't it work?
+
+  - stroke has proximal vessels blocked and the resolution of this changes over time, so PWI/DWI may not be exact
+
+- different studies had different criteria and very complicated protocols
+
+- sometimes automated methods can give very bad or misleading results
+
+- conclusions
+
+  - no perfusion map or threshold can truly tell the fate of the tissue and any results need to be taken with a grain of salt
+
+
+## Lecture 10 - Vessel size imaging
+
+- changes in transverse relaxation over time are different for gradient echo (GE) and spine echo (SE) sequences
+
+  - the transverse relaxation rates during the passage of a contrast agent depend on the vessel size
+  - the relaxation rate stays constant for GE but decreases as a function of vessel radius for SE
+  - signal changes in GE and SE contrasts can be tracked by a double echo sequence, but there are other ways (ssCE-MRI - only animals, separate GE and SE acquisition - can lead to misregistraion)
+
+- however, post-processing cannot get good results if the original data is low resolution
+
+- could this method be used to find tumor types?
+
+  - a study was run on elderly post-stroke patients vs young 
+  - some confusing results, but also a clear difference between tumor and non-tumor tissues
+  -  longitudinal follow-ups showed some promising results
+
+- typical pitfalls of a prospective clinical study
+
+  - ethics approval, funding, method, under-recruitment
+
+  
 
 
 
