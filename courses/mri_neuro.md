@@ -550,7 +550,43 @@
 
   - ethics approval, funding, method, under-recruitment
 
-  
+
+## Lecture 11 - MR spectroscopy
+
+- focus: *in vivo* spectroscopy on $^1H$ in the brain
+- the frequency spectrum can be measured from MRI (units: ppm)
+- what are spectra composed of?
+  - different metabolites - creatine, choline, NAA, glutamate, GABA etc
+  - these metabolites have a frequency distribution of their resonance frequencies
+  - local magnetic field around electrons => different resonance frequency
+- we can record a signal on an RF coil and apply the Fourier transform to get the spectrum
+- j-coupling - protons are influenced by other protons, results in splitting of peaks and their modulation
+- uncoupled spins yield singlet peaks
+- spectral appearance also changes with echo time - smoother with higher TE
+  - TE is time from the center of radiofrequency (RF) pulse to center of echo
+- slice selection is done via the magnetic field gradient
+- volume selection is done by combining slices with gradients (single-voxel/volume)
+- phase encoding - repeated application of a magnetic field gradient of different amplitudes - imprints position-dependent phase changes (used to resolve objects that experienced different phase changes)
+- issues and solutions:
+  - shimming - locally removing macroscopic B0 inhomogeneities to remove artefacts 
+  - water suppression - water distorts peaks, water suppression is applied before MRS excitation
+  - lipid suppression
+  - chemical shift displacement error - difference in larmor frequency between metabolites can lead to spatial displacement of localized volume
+- quantitation
+  - area under peak / free induction decay amplitude ~ concentration of metabolite
+  - calculated concentrations often need to be corrected for T1 and T2 relaxation
+- fitting of MRS data in the time and frequency domain is done by different algorithms
+- applications
+  - Alzheimer's disease:
+    - morphological changes like brain atrophy
+    - one spectroscopy derived marker: tNAA/mlns ratio
+  - tumors
+  - schizophrenia
+    - dopaminergic neurotransmission dysfunction
+- localized MRS can be performed using different pulse sequences
+- ultrahigh field MRS - enhanced sensitivity and SNR
+
+
 
 
 
