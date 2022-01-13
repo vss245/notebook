@@ -1143,7 +1143,133 @@
 
   - AdaBoost focuses on hard-to-learn patterns, so we can define the influence of a pattern
 
-    
+## Lecture 11: Decision trees and random forests
+
+- one of the most common approaches despite their simplicity
+- examples: 
+  - microsoft kinect pose estimation
+  - recommender systems
+
+#### Background
+
+- given features $X_1, X_2..$ and a target $Y$
+- key idea: partition feature space into a set of rectangles, fit a simple model (e.g. a constant) in each one
+- although each partitioning line has a simple description, some regions may be complicated to describe, especially in multiple dimensions 
+- algorithm: divide and conquer - split space into two regions, model response by mean of Y in each region, repeat
+- recursive binary splitting
+
+#### Concept
+
+- example: split at $X_1 = t_1$, then split $X_1 \leq t_1$ at $t_2$
+- result: partitioning into regions
+- model: $\hat{f}(X)=\sum_m c_mI\{(X_1,X_2)\in R_m\}$
+- <img src="img/ml/tree.png" alt="tree" style="zoom:50%;" />
+- $c_m$ is a weight
+
+#### Algorithm
+
+- given N observations, P features (P-dimensional space)
+- we would like to split it using splitting variables j at s split points
+- minimization criterion: $\hat{c}_m=mean(y_i|x_i\in R_m)$ (sum of squares)
+- finding best binary partition is computationally infeasible, so we use a greedy approach
+- splitting variable j and split point s define a pair of half planes:
+  - $R_1(j,s)=X|X_j\leq s$ and $R_2=X|X_j>s$
+- we want to solve $\min_{j,s}[\min_{c_1}\sum_{x_i\in R_1}(y_i-c_2)^2+\min_{c_2}\sum_{x_i\in R_2}(y_i-c_2)^2]$
+- inner minimization can be solved by an average of $y_i|x_i$ in a "box"
+
+#### Measures
+
+- information gain can be measured by the concept of entropy from information theory
+- Gini impurity - how often is a randomly chosen element from the set incorrectly labelled if it was randomly labelled according to the distribution oflabels
+- variance reduction - total reduction of the variance in the target variable due to the split at a particular node
+
+#### Pruning
+
+- if a tree is too large, it will overfit
+- if it's too small, it will not capture the structure
+- solution: grow a large tree, then prune it using a cost-complexity criterion
+  - collapse any number of internal non-leaf nodes
+  - find a subtree that minimizes $C_a(T)=\sum_mN_mQ_M(T)+\alpha|T|$ - first term is the cost (training data in the region times the squared loss), second term is the complexity (regularization parameter times the number of terminal leaves)
+- weakest link pruning - starting with full tree, successfully collapse the internal node that produces the smallest increase in $\sum_m N_m Q_m(T)$ per node
+  - choose optimal $\alpha$ via CV
+
+#### Advantages
+
+- interpretable
+- generalize well to high dimensions
+- can handle mixed predictions
+- handles missing data
+- but: overfits easily
+
+#### Hypothesis space
+
+- when the hypothesis space H is finite, the generalization error can be bounded by $P(error_X(h)>\epsilon)\leq|H|e^{-m\epsilon}$, where m is the number of samples 
+- we can write $P(error_X(h)>\epsilon)=\delta$
+- $error_X(h)\leq\frac{log|H|+log\frac{1}{\delta}}{m}$
+- generalization error grows with model complexity and decreases with training size
+- this bound can only be applied if hypotheses perfectly classify the data
+- another bound is bias+variance:
+  - <img src="img/ml/bnd1.png" alt="imd" style="zoom:50%;" />
+- how large are decision trees?
+  - if depth = 0, H = 2
+  - if n binary features, $H = 2^{2^n}$
+  - solution for trees of depth k:
+    - initially, $|H_0|=2$
+    - $|H_{k+1}|=n \times |H_k| \times |H_k|$ (left and right tree)
+    - $log_2|H_k|=(2^k-1)(1+\log_2n)+1$
+- <img src="img/ml/dtr.png" alt="img" style="zoom:50%;" />
+- => decision trees are quite bad!
+
+#### Regularization
+
+- we can use model averaging (ensembling)
+- generalization error: bias (low if a tree is deep) + var (high - sensitive to splits) + residual error
+- decision trees often produce noisy or weak classifiers
+- idea: combine predictions of several randomized trees into a single model to reduce variance
+- make trees on boostrap samples
+  - predictions become highly correlated, so the variance reduction is not that high
+  - but bagging has smoother bounds
+
+#### Random forests 
+
+- random subspace method - randomly sample features without replacement
+  - this decorrelates estimators
+- random forest - bagging + random subspace method
+- complexity control out-of-the-bag - estimate generalization error using untrained samples
+- algorithm:
+  - draw a bootstrap sample of size N
+  - grow a tree to this data until minimum node size is reached
+    - select m features at random
+    - pick best split point
+    - split into 2 nodes
+- result: ensemble of B trees
+- predict via regression or classify via majority vote
+- single tree:
+  - train each tree on bootstrap sample
+  - fr eoach split, look at subset of randomly selected features
+  - no pruning
+  - fit B trees and aggregate predictions
+
+- both single and random tree are easy to tune, but single trees are easier to interpret whereas random trees are slower and a "black box"
+
+#### Boosting
+
+- given a weak learner, run it multiple times on re-weighted data, then let learned classifiers vote
+
+- on each iteration, like in bagging, draw a sample of the observations with replacement
+
+- unlike bagging, observations are not sampled randomly, higher weight observations are more likely chosen
+
+- weight each training example by how incorrectly it was classified (weigh harder examples more)
+
+- gradient tree boosting - iteratively improve a weak learner by correcting it 
+
+  - fit a new tree to the residual
+  - gradient boosting is a gradient descent algorithm and can be generalized with other loss functions
+
+- <img src="img/ml/dtr2.png" alt="img" style="zoom:50%;" />
+
+  
 
 
 
