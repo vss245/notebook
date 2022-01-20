@@ -1271,11 +1271,112 @@
 
   
 
+## Lecture 12: Neural networks 2
+
+#### Recap
+
+- one of the most popular techniques
+- earliest model - perceptron
+  - classifier that perfectly separates linearly separable data
+  - trained iteratively
+    - $y = w^Tx+b$ where the sign of y is the classification decision 
+    - iterate over all data points, compute $y_x=w^Tx_k+b$
+    - if correctly classified, continue
+    - if incorrect, apply $w \leftarrow w + \gamma x_kt_k$ and $b \leftarrow b+\gamma t_k$
+    - stop once all examples are correctly classified
+  - stochastic gradient descent of the error function $\Epsilon(w,b)=\frac{1}{N}\sum_k \max(0,-y_kt_k)$
+  - thin margin - more iterations
+- a lot of problems are not linearly separable
+  - trick - transform the data nonlinearly through some function $\Phi$ before applying the linear decision function $f(x)=w^T\Phi(x)+b$
+- neural networks learn some feature space from the data, whereas in other kernel methods we have to choose the feature space ourselves
+- ANN
+  - inspired by the way the brain represents sensory input and learns from repeated stimuli
+  - neuron activations can be seen as a nonlinear transformation of the sensory input (similar to $\Phi$)
+  - the neural representation adapts itself after repeated exposure to certain stimuli
+- the artificial neuron
+  - simple multivariate, nonlinear and differentiable function
+  - able to produce complex non-linear representations with many interconnected neurons and able to learn from the data
+  - $a_i \rightarrow w_{ij} \rightarrow \sum+b \rightarrow z_j \rightarrow g(.)\rightarrow a_j$
+  - idea: use the same error function as the perceptron, but replace the perceptron output by the neural network output 
+  - compute the gradient of the error function wrt the parameters $\theta$ of the neural network
+- how to compute the gradient of the error function?
+  - the gradient can be expressed in terms of a gradient of higher layers using the multivariate chain rule
+    - $\frac{\part E}{\part z_i}=\sum\frac{\part z_i}{\part z_j}\frac{\part E}{\part z_j}$
+    - then we can extract the gradient with regards to the parameters of the model
+    - this algorithm is known as error backpropagation
+
+#### Optimizing neural networks
+
+- how hard is it? are we guaranteed to converge to a good local minimum? how quickly is it?
+- unlike SVMs, there are many local minima
+- some runs may not converge to a good solution
+
+#### Initialization
+
+- weights should be initialized randomly - it breaks symmetries in parameter spce and reduces the risk of getting stuck in local minima
+- if necessary, we should train the network using random weights and keep the one with the lowest error
+- heuristic:
+  - if the network has ReLU neurons, use $w_{ij}= \mathcal{N}(0,\sigma^2)$, $\sigma^w = \sqrt{2/N}$ where N is the number of input connections
 
 
+#### Shape of the error function
 
+- another problem - the network may converge to some good local optimum but very slowly due to pathological curvature of the error function (small ridge where the minimum exists)
+- the curvature of the error function can be characterized by looking at the eigenvalues of the Hessian of the error function 
+  - $H = (\frac{\part^2 \mathcal{E}(\theta)}{\part\theta_i\part\theta_j})_{ij}$
+  - useful quantity - the ratio between the highest and lowest eigenvalue (condition number) - if this is high, convergence will be slow
+- simplest case - homogeneous linear model $y = w^Tx$
+  - consider $\mathcal{E}(w)=E[0.5 (1- yt)^2]$ (mean square error)
+  - the mean square error is easier to analyze than perceptron loss
+  - the Hessian is given by $$\frac{\part^2\mathcal{E}}{\part w^2}=E[xx^T]$$ 
+  - if the condition number is too high, the optimizaion will be hard
+    - can be reduced by centering the data before training
+- takeaway: center the input data and also activations in each layer
+  - exactly centering activations can be hard, but choosing a function satisfying $g(0)=0$ will promote reasonable centering
+    - e.g. good: ReLU, tanh, centered softplus
+    - bad: logistic sigmoid, standard softplus
 
+- centering will reduce the pathological curvature, but doesn't eliminate it
 
+#### Improving gradient descent
+
+- a complementary approach is to modify the optimization procedure to move faster along directions of low curvature
+  - this can be done by introducing momentum - will move faster by keeping some of the direction
+  - SGD: $\theta = \theta - \gamma\frac{\part \mathcal{E}_k}{\part \theta}$
+  - SGD + momentum: $\triangle = \mu\triangle - \gamma\frac{\part \mathcal{E}_k}{\part \theta}$, $\theta=\theta-\gamma\triangle$
+  - where $\gamma$ is the learning rate and $\mu$ is the momentum
+    - typical values: $\gamma =0.01$,$\mu=0.9$ (reduced if the training diverges)
+
+#### Well-generalizing solutions
+
+- in perceptron loss, the error becomes 0 as soon as the current data point is correctly classified
+- we can use the hinge loss (with a margin) that imposes a penalty on points that are too close to the hyperplane and leads to better generalization
+  - similar to slack variables in SVM
+- however:
+  - if we multiply the weights by some factor, we can trivially reduce the hinge loss without moving the decision boundary
+  - in SVM, we avoided it by constraining the weights
+  - so we need to regularize the network
+    - weight decay
+    - data perturbation
+    - representation perturbation
+    - training noise
+
+#### NNs vs SVMs/kernels
+
+- SVMs
+  - straighforward to optimize and regularize
+  - doesn't scale well to very large datasets
+- NNs
+  - can be trained on very large distributions
+  - challenging to optimize and regularize
+
+#### Further topics
+
+- incorporating prior knowledge (data extension, weight sharing, pretraining)
+- predicting structured data
+- regression, mixture density networks
+- adversarial robustness
+- explainability
 
 
 

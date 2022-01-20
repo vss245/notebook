@@ -586,15 +586,82 @@
 - localized MRS can be performed using different pulse sequences
 - ultrahigh field MRS - enhanced sensitivity and SNR
 
+## Lecture 12 - Functional MRI
 
+- intro
 
+  - functional imaging is a pretty broad term
 
+  - doesn't just include BOLD imaging
 
+  - as opposed to structural MRI, the dimension of time is added by taking multiple images over time
 
+- neurovascular coupling
+  - as neural activity increases, the rate of oxygen consumption increases ($CMRO_2$)
+  - therefore, the cerebral blood flow and volume (CBF and CBV) increase
+  - the amount of deoxygenated hemoglobin (deoxyHb) decreases
+- BOLD
+  - blood oxygenation level dependent signal
+  - oxyHb is diamagnetic, deoxyHb is paramagnetic 
+    - paramagnetic - more dephasing of spins (protons) via distortion of the magnetic signal => less MR signal
+    - anything that distorts the magnetic field leads to inhomogeneities which increases the dephasing (signal drops faster when the field is inhomogeneous)
+  - deoxyHb acts like a contrast agent (less deoxyHb, longer T2*, more MR signal)
+  - gradient echo - T2*, spin echo - less star weighting (reducing the effect of inhomogeneities)
+    - the BOLD signal is much more pronounced in gradient echo sequences
+- hemodynamic response function (HRF)
+  - stimulus -> neural response -> hemodynamic response (+noise) -> HRF -> signal
+  - starts with an initial dip after a stimulus - could be because the blood volume initially increases
+  - increases to the peak, then has a post-stimulus undershoot (could be due to a slow CBV decrease)
+  - properties
+    - slow
+    - small in amplitude
+    - shape differs between and within individuals (by brain region)
 
-
-
-
+- BOLD signal factors
+  - distance
+    - effect of deoxyHb on MR depends on $(r/a)^2$
+    - r = distance from vessel to ROI
+    - a = vessel radius
+    - capillaries would be closest, intracortical veins are further, pial veins are farthest
+  - vessel orientation
+    - max when orthogonal to B0
+    - zero when vessel is parallel to B0
+  - MR parameters
+    - linearly increases with echo time (TE - time between the first RF and the readout)
+      - maximal when TE = T2 or T2*
+- source and mechanism of the BOLD signal:
+  - changes in LFPs more than action potentials
+    - LFPs - synaptic activity including neural inputs
+    - APs - spiking - suprathreshold output
+  - post-synaptic terminals and astrocytes release vasodilators (NO, prostaglandins)
+- characteristics of functional MRI sequences
+  - T2* weighted
+  - fast acquisition (echo planar imaging)
+    - 0.4-3s per volume
+  - low spatial resolution
+    - voxel size 1.5-3mm
+- echo planar imaging
+  - all phase encoding steps acquired within one TR (single shot)
+- issues
+  - interfaces between spaces lead to loss of signal
+- task-based MRI
+  - stimulus in form of a paradigm (task/set of tasks)
+  - compare task-based fMRI to baseline
+- resting state MRI
+  - anti-correlated with task performance
+  - functional connectivity can reveal networks
+    - e.g. DMN, visual
+  - FC methods
+    - seed-based
+    - decomposition (ICA etc)
+    - clustering
+    - graph theory
+    - MVPA
+  - what's the signal
+    - low frequency oscillations
+    - Slow fluctuations
+    - spontaneous neural activity + physiological signals + scanner-related signals
+- 
 
 
 
