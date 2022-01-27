@@ -1378,6 +1378,108 @@
 - adversarial robustness
 - explainability
 
+#### Summary
+
+- two challenges: optimization and regularization
+- optimization can be studied analytically via the Hessian and the condition number
+- regularization can be done via margin losses and perturbations 
+
+
+
+## Lecture 13: Clustering and expectation maximization
+
+#### Clustering
+
+- unsupervised learning is less interpetable and "safe" than supervised
+- given N d-dimensional datapoints with no labels, partition data into K disjoint sets based on similarity
+- how to measure similarity?
+  - norm / squared distance
+  - if non-Euclidian (e.g. genome) - can be non-trivial
+
+#### K-means
+
+- define clusters by minimum Euclidian distance ot cluster mean
+- find a set $\theta$ that minimizes $J(\theta)=\sum_k\sum_{x_n\in S_k}\norm{x_n-\mu_k}^2$
+- where $\mu_k=\frac{1}{|S_k|}\sum_{x_n\in S_k}x_n$
+
+#### Expectation maximization
+
+- algorithm to find a clustering solution
+- choose K random points as initial cluster centers
+- calculate $S_k^{t}$ (expectation) and update the next mean $\mu_k^{t+1}$
+- iterate until convergence
+- but enumerating this can be computationally infeasible
+
+#### Density estimation
+
+- multivariate Gaussian
+- doesn't always model data (class-conditional densities) well
+- gaussian mixture model:
+  - $p(x|\theta)=\sum_k\tau_kp_k(x|\mu_k,\Sigma_k)$
+  - $\tau_k$ scales the prior (x given the distribution)
+  - normalized = $\sum \tau_k=1$
+- GMMs are universal density approximators
+- as a by-product, they provide a clustering solution
+
+#### Fitting a GMM
+
+- we can fit a GMM using maximum likelihood
+  - this may be difficult to optimize
+- we can also fit it using expectation maximization
+  - trick: introduce auxiliary variables indicating the membership of each sample in a Gaussian
+  - we initialise t = 0, $\theta =\{\tau_1..., \mu_1..., \Sigma_1...\}$
+  - expectation: compute membership probabilities 
+    - probability that a certain indicator for the nthdata point is pointing at the kth cluster $q(z_{nk}):=p(z_{nk}=1|x_n,\theta^t)$, use Bayes to convert to $\frac{p(x_n|z_{nk},\theta)p(z_{nk},\theta)}{p(x_n)|\theta}$
+  - maximization: update $\theta$ given (soft) cluster assignments - soft cluster assignments can split data point between clusters
+    - $\tau_k^{t+1}=1/N \sum_n q^t(z_{nk})$
+    - $u^{t+1}_k=1/N\tau_k^{t+1}\sum_n q^t(z_{nk})x_n$
+- we can also use hard cluster assignments, then $z_{nk}^t$ is either 1 or 0
+- hard assignments can force the algorithm to make choices that push it into a local minimum
+- in contrast with K-means, GMM allows for unequal cluster variances, unequal cluster probabilities etc
+
+#### Expectation maximization algorithm
+
+- why is this the right algorithm to use?
+- we want to maximize the likelihood of the observed data 
+- $L(\theta|X)=p(X|\theta)$
+- $\theta=\arg\max_\theta \log p(X|\theta) = \arg\max_\theta \log \sum_{z\in Z} p(X,z|\theta)$
+- maximizing this directly is difficult because of the log of the sum
+- but it is often easy to optimize the complete data likelihood 
+- we don't know z and we need to estimate it jointly with $\theta$
+- algorithm
+  - iterate between updates of hidden variables and parameters
+  - theory: updates are defined in such a way that $p(x|\theta)$ increases at every step
+  - guaranteed to find local maximum (hard to find global max if it's not concave)
+  - technically: optimize a lower bound on $p(X|\theta)$ and improve it
+- Jensen's inequality:
+  - for any convex combination $\lambda_1...\lambda_l$, $\lambda_i\geq0$, $\sum_i \lambda_i=1$ and any concave function f:
+  - $f(\sum_i \lambda_ix_i)\geq\sum_i\lambda_if(x_i)$
+- a lower bound on the log-likelihood
+  - $q(z)$ is a PMF on z
+  - $\log p(X|\theta)=\log \sum_z p(X, z|\theta)$
+  - multiply by q(z)/q(z:
+    - $\log p(X|\theta)=\log \sum_z q(z) p(X, z|\theta)/q(z)$
+  - we can use Jensen's inequality, since $\sum_z q(z)=1$, log is concave
+  - $\geq \sum_z q(z) \log \frac{p(X,z|\theta)}{q(z)}$
+  - where log is the f and q(z) is the lambda
+  - sum of logs is easier to optimize than the log of a sum
+- true objective is to maximize the log likelihood wrt $\theta$
+- EM objective: maximize the lower bound wrt $q,\theta$
+  - $\hat{q},\hat{\theta}=\arg\max F(q(z),\theta)$
+- how to select and improve q(z)?
+  - $KL(q(z)||p(z|x,\theta))=0$ if $q(z)=p(z|x,\theta)$
+  - we improve q(z) by setting the KL divergence to 0
+- we improve theta by maximizing F(q(z), theta) with regards to theta - set the gradient to 0
+
+#### Summary
+
+- EM is meta-algorithm for obtaining local ML estimates
+- also applicable to MAP estimation
+- useful in models with latent variables z, where optimizing the incomplete data likelihood directly is hard, but optimizing the complete data likelihood is easy
+  - alternate between estimating z and theta
+- can be applied to GMM, but is not equal to it
+- other applications: HMM, missing data, only summary data observed
+
 
 
 
