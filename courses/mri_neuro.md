@@ -595,7 +595,6 @@
   - doesn't just include BOLD imaging
 
   - as opposed to structural MRI, the dimension of time is added by taking multiple images over time
-
 - neurovascular coupling
   - as neural activity increases, the rate of oxygen consumption increases ($CMRO_2$)
   - therefore, the cerebral blood flow and volume (CBF and CBV) increase
@@ -616,7 +615,6 @@
     - slow
     - small in amplitude
     - shape differs between and within individuals (by brain region)
-
 - BOLD signal factors
   - distance
     - effect of deoxyHb on MR depends on $(r/a)^2$
@@ -661,7 +659,41 @@
     - low frequency oscillations
     - Slow fluctuations
     - spontaneous neural activity + physiological signals + scanner-related signals
-- 
+
+## Lecture 14 - Clinical trials
+
+- clinical trials start with observation
+  - e.g. patterns in signal changes in DWI and T2 weighted imaging following acute ischemic stroke
+  - several studies have been done, noticing a drop in apparent diffusion coefficient < 1 hr after stroke (reaching the peak in several days and staying up to a week, then "pseudonormalizing") + increase in T2 weighted signal 2-4h after stroke (stays high)
+
+- apparent diffusion coefficient - measure of the magnitude of water diffusion within tissue (log of the rato of SI with and without diffusion gradients accounting for the b value)
+  - trace w - images created by averaging images sensitiv to diffusion along at least 3 directions
+- observation -> idea
+  - we could use DWI/T2/FLAIR differences to date a stroke
+  - FLAIR - fluid attenuated inversion recovery
+  - it's important to know how old a stroke is due to different windows for treatments (and strokes often have an unknown onset time)
+
+- next is a proof of concept study (in this case, calculating sensitivity, specificity, positive/negative predictive value)
+- how to proceed to action?
+  - two types of medical studies - interventional (treatment groups) and observational (results don't influence treatment)
+  - other categories: phases, randomization, placebo-controlled, multi/monocenter, open label/blind/double blind
+
+- preparation for a trial
+  - define primary and secondary endpoints, exclusion and inclusion criteria, calculate sample size, estimate number of centers, predefine statistical analyses, determine a target for funding
+  - once funded - steering committee, ethics, supply, MRI acquisition standards, coordinate the trial, contingency plan, transfer results to guidelines etc etc
+
+- in MRI - fine-tune inclusion and exclusion criteria, create material and software/viewing platform
+  - criteria - confirmed stroke, DWI-FLAIR mismatch (indicates the correct window)
+    - exclusion: haemorrhage, large strokes, poor image quality, DWI-FLAIR match
+
+  - fine-tuned using different analyses and raters
+  - however, the match/mismatch can be a difficult criterion
+    - heterogeneity in rating
+    - reluctance to include patients
+
+- CIRB - central image reading board
+- once the study starts, need to montor quality of acquisition, review all images (CIRB), test and certify new investigators
+- issues can crop up - can petition for additional funding and add new countries
 
 
 

@@ -1480,6 +1480,141 @@
 - can be applied to GMM, but is not equal to it
 - other applications: HMM, missing data, only summary data observed
 
+## Lecture 14: Explainable AI
+
+#### Intro
+
+- ML can be a "black box"
+- it can be hard to interpret complicated non-linear algorithms
+
+#### Prototypes
+
+- some interpretation of the models can be done with class prototypes
+  - model: RGB image -> deep NN or other model -> output (probability that the image belongs to the class car $p(\omega_c|x)$)
+  - goal: e.g. understanding what a "typical car" is 
+  - activation maximization framework $max_{x\in X} \log p(\omega_c|x)-\lambda\norm{x}^2$
+  - one problem - the pictures aren't very natural looking
+- building natural prototypes
+  - find input pattern that produces the strongest class activation $\max_{x\in X}\log p(\omega_c|x)-\lambda\norm{x}^2$
+  - replace by a data-dependent regularizer $\max_{x\in X}\log p(\omega_c|x)+\log p(x)$ - the second term makes the data belong to the dataset manifold
+  - apply Bayes' theorem $\max_{x\in X}\log p(x|\omega_c)$ -> find most likely input pattern for a given class
+  - insight - a good prototype must also depend on the data distribution
+- we can build prototypes using a generator
+  - a probability distribution in code space decoded by a non-linear model and translated to a distribution in input space -> classified in output space
+  - ![prototype](\img\ml\prot.png)
+  - ^ GAN architecture
+  - a regularizer is used because otherwise we can input an arbitrarily large vector to get high probabilities
+  - the activation maximization is done in the code space, not the input space
+    - GAN trick - use a lower dimensional space
+- prototypes can be build using a generator (Nguyen 2016)
+
+#### Types of interpretation
+
+- global - understanding what a lamp typically looks like
+- local - understanding why this image of alamp is classified as one
+- approaches
+  - ante-hoc - choose a readily interpretable model (e.g. $f(x)=\sum_i g_i(x_i)$ where the ith term is the contribution of the ith variable)
+    - problem - is the model expressive enough?
+  - post-hoc - choose a model that works well, develop a technique to interpret it
+    -  e.g. $f(x)=DeepNet(x)$
+
+#### Local interpretation
+
+- we can explain predictions pixel-wise using relevance propagation (Bach et al 2015)
+- issues:
+  - doing this to non-linear functions is hard
+  - explaining single decisions is difficult
+
+#### Explaining neural network predictions
+
+- layer-wise *relevance* propagation - first method to explain nonlinear classifiers, based on generic theory and applicable to any NN with monotonous activation
+  - which pixels contribute how much to the classification?
+  - deep taylor decomposition
+- we can also look at *sensitivity*/saliency - which pixels lead to an increase/decrease of the prediction score when changed?
+- *deconvolution* - matching input pattern for the classified object
+- each method solves a different problem
+
+- it seems like backpropagation, but we are not changing the model but rather explaining it
+
+#### Choosing methods
+
+- sensitivity analysis is often not the question that you would like to ask
+- LRP can distinguish positive and negative evidence
+- Samek et al 2015 - measuring the quality of explanation
+
+#### Scaling methods
+
+- how to use these methods without looking at every heatmap?
+- SpRAy - spectral relevance analysis
+- get a relevance heatmap for a decision, then do eigenvalue clustering to identify strategies for a particular class
+  - this can help detect things such as detecting classes via copyright tags or empty space (like with airplanes)
+
+#### Applications
+
+- we can use this on faces to find the features corresponding to particular adjectives like "old" or "sad"
+  - important to have a balanced dataset i.e. different facial expressions, types of faces etc
+  - large datasets often have uncontrollable biases
+- document classification - types of words in a text can be used to assign a category to it
+- gaming - e.g. breakout (atari) - deepmind analysis
+
+#### Unsupervised learning
+
+- support vector data description
+- NEON - neuralization propagation (e.g. applied to clustering algorithms)
+
+## Lecture 15: Machine Learning Applications
+
+#### Intro
+
+- Uses: chemical compound space, medicine, BCI
+
+#### Chemistry/physics
+
+- can we use ML to predict the outcome of Schrödinger's equation?
+- we can represent molecules using Coulomb matrix (off-diagonal - Coulomb force between i and j atoms)
+  - e.g. a molecule of 23 atoms becomes a 23x23 matrix
+- distances between molecules M define a Gaussian kernel matrix
+- predicting energy - sum over weighted Gaussians using weights that minimize the error in the training set - kernel ridge regression
+- later, new models and methods came out that improved both speed and accuracy
+- example: deep tensor neural network
+  - Input: atomic numbers and interatomic distances
+  - vector representations: in NLP, word2vec - word to vector space
+  - a similar embedding was used here based on chemical context
+  - we can add interactions with environment using refinements (embedding of an atom + bonds)
+  - predicting via atom-wise contributions
+- SchNet - quantum interactions from convolutions
+- we can visualize DTNN representations of energy in molecules and chemical potential
+  - explainable methods can help us get insights from the models
+  -  we can even infer parts of the periodic table from this representation
+- molecular dynamics with ML - we can inform the model with physics knowledge to reduce unnecessary data 
+  - molecules move around and end up in local minima on the energy surface
+  - estimating an energy surface is a regression problem
+  - we can exploit prior knowledge like energy conservation and molecular symmetries to help the potential energy surface estimation
+
+#### Medicine
+
+- Brain computer interfaces (brain pong)
+  - EEG data analysis
+  - applications - ALS, stroke, etc
+  - other applications - video games, driving monitoring
+- Morpho-molecular intergration
+  - analysing slices for cancer
+  - interpretable methods can also help with understanding features
+
+#### Digital humanities
+
+- explaining similarity between images - BiLRP
+- deep similarity models - insights on how ideas progress in historical documents (spatio-temporal evolution of knowledge)
+
+#### Uncertainty
+
+- reinforcement learning and planning under uncertainty, non-stationarity etc - modeling sports like curling
+
+  - high combinatorics, so easier to model with deep networks
+  - can build a robot that computes the throwing strategy
+
+  
+
 
 
 
